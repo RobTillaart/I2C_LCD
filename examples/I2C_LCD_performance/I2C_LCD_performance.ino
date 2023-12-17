@@ -3,6 +3,7 @@
 // PURPOSE: per I2C_LCD library
 //     URL: https://github.com/RobTillaart/I2C_LCD
 
+
 #include "Arduino.h"
 #include "Wire.h"
 
@@ -71,6 +72,7 @@ void setup()
   }
   Wire.setClock(100000);
 }
+
 
 void loop()
 {
