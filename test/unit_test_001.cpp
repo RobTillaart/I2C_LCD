@@ -27,7 +27,7 @@
 
 unittest_setup()
 {
-  fprintf(stderr, "I2C_LCD_LIB_VERSION: %s\n", I2C_LCD_LIB_VERSION);
+  fprintf(stderr, "I2C_LCD_LIB_VERSION: %s\n", (char *) I2C_LCD_LIB_VERSION);
 }
 
 
