@@ -46,7 +46,7 @@ unittest(test_constructor)
 {
   I2C_LCD lcd(0x39);
 
-  assertFalse(1, 1);
+  assertEqual(1, 1);
 }
 
 
