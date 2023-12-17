@@ -6,8 +6,8 @@
 #include "Arduino.h"
 #include "Wire.h"
 
-//#include "I2C_LCD.h"
-#include "LiquidCrystal_I2C.h"
+#include "I2C_LCD.h"
+
 
 #define BACKLIGHT_PIN   3
 #define En_pin          2
@@ -19,8 +19,8 @@
 #define D7_pin          7
 
 
-//I2C_LCD lcd(39);
-LiquidCrystal_I2C lcd(39);
+I2C_LCD lcd(39);
+
 
 void setup()
 {
@@ -31,15 +31,11 @@ void setup()
   Serial.println(I2C_LCD_LIB_VERSION);
   Serial.println();
 
-  //lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN);
-  lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin); //, BACKLIGHT_PIN);
+  lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN);
 
   Wire.begin();
   Wire.setClock(400000);
   lcd.begin(20, 4);
-
-  lcd.setBacklightPin(BACKLIGHT_PIN, POSITIVE);
-  lcd.setBacklight(true);
 
   lcd.display();
   delay(1000);

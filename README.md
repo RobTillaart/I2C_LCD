@@ -123,11 +123,13 @@ In the first version these are public, however they probably should be private.
 
 #### Should
 
-- investigate functional range
+- fix TODO's in code
+- implement functional range
 - test with other platforms
 - test with other display sizes
 - test more
 - make a PR for New-LiquidCrystal library to implement there too.
+
 
 #### Could
 
@@ -135,6 +137,8 @@ In the first version these are public, however they probably should be private.
 - add examples
   - Wire1, Wire2 etc
 - solve MAGIC numbers (defaults)
+- add timestamp last print
+- position control in write().
 
 
 #### Wont
