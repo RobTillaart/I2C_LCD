@@ -1,4 +1,4 @@
-//    FILE: I2C_LCD_demo.ino
+//    FILE: I2C_LCD_test_tab.ino
 //  AUTHOR: Rob Tillaart
 // PURPOSE: demo I2C_LCD library
 //     URL: https://github.com/RobTillaart/I2C_LCD
@@ -30,46 +30,35 @@ void setup()
   Serial.println(__FILE__);
   Serial.print("I2C_LCD_LIB_VERSION: ");
   Serial.println(I2C_LCD_LIB_VERSION);
-  Serial.println();
+  Serial.println((int)'\t');
 
-  lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN);
+  // lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN);
 
   Wire.begin();
   Wire.setClock(400000);
   lcd.begin(20, 4);
 
   lcd.display();
-  delay(1000);
-  lcd.noDisplay();
-  delay(1000);
-  lcd.display();
-
   lcd.clear();
+  lcd.print("TAB demo:\t");
+  lcd.print(I2C_LCD_LIB_VERSION);
 
-  lcd.home();
-  lcd.setCursor(3, 1);
-
-  uint32_t start = micros();
-  lcd.print(__TIME__);
-  uint32_t stop = micros();
-
-  lcd.setCursor(10, 0);
-  lcd.print(stop - start);
-
-  lcd.setCursor(0, 0);
-  for (char c = 'A'; c <= 'Z'; c++)
+  for (int r = 1; r < 4; r++)
   {
-    lcd.print(c);
+    lcd.setCursor(0, r);
+    for (int i = 0; i < 5; i++)
+    {
+      // lcd.print(lcd.getCol());
+      lcd.print(random(100));
+      lcd.print('\t');
+    }
   }
-  delay(2000);
+
 }
 
 
 void loop()
 {
-  lcd.home();
-  lcd.print(millis());
-  delay(1000);
 }
 
 

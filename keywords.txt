@@ -8,22 +8,39 @@ I2C_LCD	KEYWORD1
 begin	KEYWORD2
 config	KEYWORD2
 
+setBacklightPin
 setBacklight	KEYWORD2
+backlight	KEYWORD2
+noBacklight	KEYWORD2
 
 display	KEYWORD2
 noDisplay	KEYWORD2
+on	KEYWORD2
+off	KEYWORD2
 
 clear	KEYWORD2
+clearEOL
 home	KEYWORD2
 setCursor	KEYWORD2
 
+noBlink	KEYWORD2
+blink	KEYWORD2
+noCursor	KEYWORD2
+cursor	KEYWORD2
 
-# LOW LEVEL API
+scrollDisplayLeft	KEYWORD2
+scrollDisplayRight	KEYWORD2
+moveCursorRight	KEYWORD2
+moveCursorLeft	KEYWORD2
+
+autoscroll	KEYWORD2
+noAutoscroll	KEYWORD2
+leftToRight	KEYWORD2
+rightToLeft	KEYWORD2
+
+
+# PRINT API
 write	KEYWORD2
-sendData	KEYWORD2
-sendCommand	KEYWORD2
-write4bits	KEYWORD2
-
 
 
 # Constants (LITERAL1)
