@@ -32,7 +32,7 @@ void setup()
   Serial.println(I2C_LCD_LIB_VERSION);
   Serial.println();
 
-  lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN);
+  lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN, POSITIVE);
 
   Wire.begin();
   Wire.setClock(400000);
