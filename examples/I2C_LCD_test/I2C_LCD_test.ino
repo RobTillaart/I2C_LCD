@@ -66,7 +66,7 @@ void loop()
 //  lcd.setCursor(0, 0);
 //  lcd.print(millis());
 //  lcd.print(" ");
-//  lcd.print(lcd.getCol());
+//  lcd.print(lcd.getColumn());
 //  delay(1000);
 }
 

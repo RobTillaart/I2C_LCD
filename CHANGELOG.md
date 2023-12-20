@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add default pins
 - update keywords.txt
 - add examples
-- add I2C_LIB_special_chars.h
+- add **I2C_LIB_special_chars.h**
 - and more
 
 

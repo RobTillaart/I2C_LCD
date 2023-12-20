@@ -52,7 +52,7 @@ void setup()
     lcd.setCursor(0, r);
     for (int i = 0; i < 5; i++)
     {
-      // lcd.print(lcd.getCol());
+      // lcd.print(lcd.getColumn());
       lcd.print(random(100));
       lcd.print('\t');
     }

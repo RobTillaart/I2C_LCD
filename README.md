@@ -26,23 +26,29 @@ Under investigation.
 
 **Experimental** Arduino library for the I2C LCD display, typical 20x4 characters.
 
+The library is inspired by the excellent LiquidCrystel_I2C library of F. Malpartida. 
+Therefore the interface is kept quite identical, extended with some additional functions.
 The goal of the library is to minimize footprint and improve performance.
 This is partly done by dedicate the library to I2C only.
-
-The library is inspired by the excellent LiquidCrystel_I2C library of F. Malpartida. Therefore the interface is kept quite identical.
-- https://github.com/fmalpartida/New-LiquidCrystal
 
 The library implements the print interface, so all data types are printable
 assuming they fit on the display.
 
+The reference:
+
+- https://github.com/fmalpartida/New-LiquidCrystal
+
 
 #### Compatibility
 
-Near 100% compatible with F. Malpartida's I2C library, relative minor differences.
+Reasonable compatible with F. Malpartida's I2C library, relative minor differences
+mostly in the constructors.
 Furthermore the current version does not support all functionality, and
-more important not tested that much.
-So if you need full functionality, or reliability, you still should use 
-the **New-liquidCrystal** library.
+more important it is not tested as much as the reference.
+Only the 5x8 font is supported.
+
+So if you need full functionality, robustness or reliability, you still should use 
+the reference **New-liquidCrystal** library.
 
 
 #### Tests
@@ -50,30 +56,33 @@ the **New-liquidCrystal** library.
 Tested on an UNO and a 20x4 character LCD, and limited on a 16x2 LCD.
 
 
-
-
 ## Performance
 
-The most important optimization is to send a byte in a single I2C transaction.
+The most important optimization is to send every byte in a single I2C transaction.
 This takes 5 bytes to transport, which is 3 less than the reference.
 
-Furthermore there is an optimization if the pins are in order, as then
-it is far easier to get the nibble (half bytes) to send.
+Furthermore there is an optimization if the pins are in ascending order, as then
+it is far easier to get the nibble (half bytes) to send. 
 
 First performance tests are good. See example **I2C_LCD_performance.ino**.
 
-The performance measurement is done on an UNO, pins are in order.
+The performance measurement is done on an UNO, pins are in order, 0.1.0 version.
 
-|  I2C clock  |  time (us)  |  notes  |
-|:-----------:|:-----------:|:-------:|
-|  100000     |     4316    |
-|  200000     |     2440    |
-|  300000     |     1780    |
-|  400000     |     1496    |  problems with spectrum examples - too much data
-|  500000     |     1308    |
-|  600000     |     1176    |
-|  700000     |     1076    |
-|  800000     |     1024    |
+|  I2C clock  |    0.1.0    |    0.1.1    |  notes  |
+|:-----------:|:-----------:|:-----------:|:-------:|
+|  100000     |     4316    |     4640    |
+|  200000     |     2440    |     2760    |
+|  300000     |     1780    |     2108    |
+|  400000     |     1496    |     1820    |  (1)
+|  500000     |     1308    |     1632    |
+|  600000     |     1176    |     1500    |
+|  700000     |     1076    |     1400    |
+|  800000     |     1024    |     1348    |
+
+Note 1: 0.1.0 problems with spectrum examples - too much data too fast killed my display.
+
+Timing in the 0.1.1 version is roughly 10% slower than 0.1.0, 
+however the 0.1.1 is more robust as far as tested.
 
 
 #### Related
@@ -104,7 +113,7 @@ User must call the appropriate **Wire.begin()** before calling **lcd.begin(()**
 
 - **void setBacklightPin (uint8_t pin, uint8_t policy)**
  policy not implemented yet.
-- **void setBacklight(bool on)**
+- **void setBacklight(bool on)** idem.
 - **void backlight()** wrapper for setBacklight()
 - **void noBacklight()** wrapper for setBacklight()
 
@@ -186,7 +195,7 @@ scrolling, right to left mode etc.
 So it can cause unwanted side effects, which can be fixed by removing
 the "pos < cols" condition from **write()**.
 
-- **uint8_t getCol()**
+- **uint8_t getColumn()**
 
 The library does not track the row (yet)
 
@@ -205,11 +214,11 @@ Idea for the future might be to set the tab-stops instead of current hardcoded o
 
 As I encountered problems during tests (display garbled) I added a counter 
 of the number of writes (each char => 5 bytes I2C).
-For now a development only, so will be removed in future.
+For now a development only, so expect it to be removed in future.
 
 - **uint32_t getWriteCount()** idem.
 
-Not resetable (yet).
+Not reset-able (yet).
 
 
 ## Future
@@ -225,7 +234,10 @@ Not resetable (yet).
 - test with other display sizes
 - test more
 - fix TODO's in code
-- investigate polarity
+- investigate/implement polarity
+- merge low level transport into one if possible
+- add table of new functions not in the reference.
+
 
 #### Could
 

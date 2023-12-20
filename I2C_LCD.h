@@ -86,12 +86,8 @@ public:
   size_t    write(uint8_t c);
 
   //  DEBUG  development
-  uint8_t   getCol() { return _pos; };  //  works.
+  uint8_t   getColumn() { return _pos; };  //  works.
   uint32_t  getWriteCount()  { return _count; };  // works
-
-
-  //  EXPERIMENTAL
-
 
 
 private:
