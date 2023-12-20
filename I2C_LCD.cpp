@@ -256,11 +256,14 @@ void I2C_LCD::createChar(uint8_t index, uint8_t * charmap)
 {
   sendCommand(I2C_LCD_SETCGRAMADDR | ((index & 0x07) << 3));
   delayMicroseconds(30);
-   for (uint8_t i = 0; i < 8; i++)
-   {
-      write(charmap[i]);
-      delayMicroseconds(40);  //  tune timing...
-   }
+  uint8_t tmp = _pos;
+  for (uint8_t i = 0; i < 8; i++)
+  {
+    _pos = 0;
+    write(charmap[i]);
+    delayMicroseconds(50);  //  tune timing...
+  }
+  _pos = tmp;
 }
 
 

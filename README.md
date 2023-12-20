@@ -14,9 +14,15 @@
 Arduino library for I2C_LCD  LCD displays.
 
 
+**Experimental, not stable with side effects use at own risk**
+
+During longer tests my 20x4 display garbled too often. 
+Needs investigation.
+
+
 ## Description
 
-**Experimental** library for the I2C LCD display, typical 20x4 characters.
+**Experimental** Arduino library for the I2C LCD display, typical 20x4 characters.
 
 The goal of the library is to minimize footprint and improve performance.
 This is partly done by dedicate the library to I2C only.
@@ -40,6 +46,8 @@ the **New-liquidCrystal** library.
 #### Tests
 
 Tested on an UNO and a 20x4 character LCD, and limited on a 16x2 LCD.
+
+
 
 
 ## Performance
@@ -178,8 +186,13 @@ the "pos < cols" condition from **write()**.
 #### Tab printing
 
 Experimental, 
-When '\t' is printed to the LCD, it moves to the first position
+When '\t' (character 9) is printed to the LCD, it moves to the first position
 that is a multiple of 4.
+This allows a simple way to get some sort of tabular data representation.
+See the example.
+
+Idea for the future might be to set the tab-stops instead of current hardcoded ones.
+
 
 
 ## Future
@@ -201,7 +214,13 @@ that is a multiple of 4.
 - add examples
   - Wire1, Wire2 etc
 - make an issue for New-LiquidCrystal library.
-
+- function to define the tab-stops, instead of hard coded ones.
+- investigate other special characters to support, like
+  - \r => goto begin of current line
+  - \n => goto begin of next line
+  - FF => form feed is clear screen.
+  - BELL => blink of the display  (oeps 7 is already a special char )
+- make a separate include file for charmaps by name.
 
 #### Wont for now.
 

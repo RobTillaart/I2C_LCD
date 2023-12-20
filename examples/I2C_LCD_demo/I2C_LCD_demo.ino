@@ -35,7 +35,7 @@ void setup()
   lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN, POSITIVE);
 
   Wire.begin();
-  Wire.setClock(400000);
+  Wire.setClock(100000);
   lcd.begin(20, 4);
 
   lcd.display();
@@ -55,6 +55,7 @@ void setup()
 
   lcd.setCursor(10, 0);
   lcd.print(stop - start);
+  delay(1000);
 
   lcd.setCursor(0, 0);
   for (char c = 'A'; c <= 'Z'; c++)
