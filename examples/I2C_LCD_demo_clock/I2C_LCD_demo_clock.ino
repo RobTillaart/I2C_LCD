@@ -1,4 +1,4 @@
-//    FILE: I2C_LCD_test_tab.ino
+//    FILE: I2C_LCD_demo_clock.ino
 //  AUTHOR: Rob Tillaart
 // PURPOSE: demo I2C_LCD library
 //     URL: https://github.com/RobTillaart/I2C_LCD
@@ -34,35 +34,45 @@ void setup()
   Serial.println(__FILE__);
   Serial.print("I2C_LCD_LIB_VERSION: ");
   Serial.println(I2C_LCD_LIB_VERSION);
-  Serial.println((int)'\t');
+  Serial.println();
 
   // lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN, POSITIVE);
 
   Wire.begin();
   Wire.setClock(100000);
-  lcd.begin(20, 4);
+
+  lcd.begin(16, 2); 
 
   lcd.display();
   lcd.clear();
-  lcd.print("TAB demo:\t");
-  lcd.print(I2C_LCD_LIB_VERSION);
-
-  for (int r = 1; r < 4; r++)
-  {
-    lcd.setCursor(0, r);
-    for (int i = 0; i < 5; i++)
-    {
-      // lcd.print(lcd.getCol());
-      lcd.print(random(100));
-      lcd.print('\t');
-    }
-  }
 
 }
 
 
 void loop()
 {
+  lcd.setCursor(4, 1);
+  printTime();
+  delay(1000);
+}
+
+
+void printTime()
+{
+  uint32_t now = millis() / 1000;
+  uint16_t hours = now / 3600;
+  now -= hours * 3600;
+  uint16_t minutes = now / 60;
+  uint16_t seconds = now - minutes * 60;
+  if (hours < 10) lcd.print(0);
+  lcd.print(hours);
+  lcd.print(":");
+  if (minutes < 10) lcd.print(0);
+  lcd.print(minutes);
+  lcd.print(":");
+  if (seconds < 10) lcd.print(0);
+  lcd.print(seconds);
+
 }
 
 

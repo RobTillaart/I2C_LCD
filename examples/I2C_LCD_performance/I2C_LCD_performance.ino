@@ -3,6 +3,10 @@
 // PURPOSE: per I2C_LCD library
 //     URL: https://github.com/RobTillaart/I2C_LCD
 
+//  WARNING: do not overfeed your display with too much data
+//           too fast as it may not be able to handle 
+//           (mine got corrupted)
+
 
 #include "Arduino.h"
 #include "Wire.h"
@@ -59,16 +63,12 @@ void setup()
   lcd.begin(20, 4);
 
   lcd.display();
-  delay(1000);
-  lcd.noDisplay();
-  delay(1000);
-  lcd.display();
-
   lcd.clear();
 
   for (uint32_t speed = 100000; speed <= 800000; speed += 100000)
   {
     performance(speed);
+    delay(1000);
   }
   Wire.setClock(100000);
 }
