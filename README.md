@@ -14,10 +14,12 @@
 Arduino library for I2C_LCD  LCD displays.
 
 
-**Experimental, not stable with side effects use at own risk**
+**Warning: experimental with side effects, use at own risk**
 
+do not overfeed your display with too much data
+too fast as it may not be able to handle.
 During longer tests my 20x4 display garbled too often. 
-Needs investigation.
+Under investigation.
 
 
 ## Description
@@ -67,7 +69,7 @@ The performance measurement is done on an UNO, pins are in order.
 |  100000     |     4316    |
 |  200000     |     2440    |
 |  300000     |     1780    |
-|  400000     |     1496    |  recommended 
+|  400000     |     1496    |  problems with spectrum examples - too much data
 |  500000     |     1308    |
 |  600000     |     1176    |
 |  700000     |     1076    |
