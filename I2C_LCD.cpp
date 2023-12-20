@@ -74,20 +74,21 @@ void I2C_LCD::begin(uint8_t cols, uint8_t rows)
   _wire->write(0x00);
   _wire->endTransmission();
 
-  //  wait for more than 50 ms
-  delay(60);
+  //  Figure 24 for procedure on 4-bit initialization
+  //  wait for more than 15 ms
+  delay(60);  //  TODO optimize
 
   //  Force 4 bit mode
   write4bits(0x03);
-  delayMicroseconds(5000);
+  delayMicroseconds(5000);  //  > 4.1 millis
   write4bits(0x03);
-  delayMicroseconds(200);
+  delayMicroseconds(200);   //  > 100 usec
   write4bits(0x03);
-  delayMicroseconds(200);
+  delayMicroseconds(200);   //  > 100 usec
+
   //  command to set 4 bit interface
   write4bits(0x02);
   delayMicroseconds(200);
-
 
   //  set "two" lines LCD - always a 20 x 4 for now.
   sendCommand(I2C_LCD_FUNCTIONSET | I2C_LCD_2LINE);
