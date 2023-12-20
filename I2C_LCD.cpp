@@ -40,6 +40,7 @@ I2C_LCD::I2C_LCD(uint8_t address, TwoWire * wire)
 {
   _address = address;
   _wire = wire;
+  _displayControl = I2C_LCD_DISPLAYCONTROL;
 }
 
 
@@ -57,9 +58,8 @@ void I2C_LCD::config (uint8_t address, uint8_t enable, uint8_t readWrite, uint8_
   _dataPin[3]     = ( 1 << data7);
   _backLightPin   = ( 1 << backLight);
   _backLightPol   = policy;
- 
+
   _pinsInOrder = ((data4 < data5) && (data5 < data6) && (data6 < data7));
-  _displayControl = I2C_LCD_DISPLAYCONTROL;
 }
 
 
@@ -71,26 +71,36 @@ void I2C_LCD::begin(uint8_t cols, uint8_t rows)
   //  ALL LOW.
   _wire->beginTransmission(_address);
   _wire->write(0x00);
+  _wire->write(0x00);
   _wire->endTransmission();
 
-  //  wait for 50 ms
-  delay(50);
+  //  wait for more than 50 ms
+  delay(60);
 
-  //  Force 4 bit mode  //  TODO timing...
+  //  Force 4 bit mode
   write4bits(0x03);
-  delay(5);
+  delayMicroseconds(5000);
   write4bits(0x03);
-  delay(1);
+  delayMicroseconds(200);
   write4bits(0x03);
-  delay(1);
+  delayMicroseconds(200);
+  //  command to set 4 bit interface
   write4bits(0x02);
-  delay(1);
+  delayMicroseconds(200);
+
 
   //  set "two" lines LCD - always a 20 x 4 for now.
   sendCommand(I2C_LCD_FUNCTIONSET | I2C_LCD_2LINE);
   //  default enable display
-  clear();
   display();
+  clear();
+}
+
+
+bool I2C_LCD::isConnected()
+{
+  _wire->beginTransmission(_address);
+  return (_wire->endTransmission() == 0);
 }
 
 
@@ -161,9 +171,8 @@ void I2C_LCD::home()
 
 bool I2C_LCD::setCursor(uint8_t col, uint8_t row)
 {
+  static uint8_t startpos[4] = { 0x00, 0x40, 0x14, 0x54 };
   if ((col >= _cols) || (row >= _rows)) return false;
-
-  uint8_t startpos[4] = { 0x00, 0x40, 0x14, 0x54 };
   sendCommand(I2C_LCD_SETDDRAMADDR | (startpos[row] + col) );
   _pos = col;
   return true;
@@ -255,13 +264,11 @@ void I2C_LCD::rightToLeft(void)
 void I2C_LCD::createChar(uint8_t index, uint8_t * charmap)
 {
   sendCommand(I2C_LCD_SETCGRAMADDR | ((index & 0x07) << 3));
-  delayMicroseconds(30);
   uint8_t tmp = _pos;
   for (uint8_t i = 0; i < 8; i++)
   {
     _pos = 0;
     write(charmap[i]);
-    delayMicroseconds(50);  //  tune timing...
   }
   _pos = tmp;
 }
@@ -273,25 +280,31 @@ void I2C_LCD::createChar(uint8_t index, uint8_t * charmap)
 //
 size_t I2C_LCD::write(uint8_t c)
 {
+  size_t n = 0;
   if (c == (uint8_t)'\t')  //  TAB char
   {
     while (_pos % 4 != 0)
     {
       moveCursorRight();  //  increases _pos.
+      n++;
     }
-    return 1;  //  not correct
+    return n;
   }
   if (_pos < _cols)   //  overflow protect
   {
     sendData(c);
     _pos++;
-    return 1;
+    n++;
+    return n;
   }
-  //  else blink ?
-  return 0;
+  //  else blink backlight to indicate error?
+  return n;
 };
 
 
+
+//  TODO merge these two
+//  optimize 95% identical.
 
 //  TODO merge these two
 //  optimize 95% identical.
@@ -329,6 +342,7 @@ void I2C_LCD::sendCommand(uint8_t value)
   _wire->write(LSN | _enable);
   _wire->write(LSN);
   _wire->endTransmission();
+  delayMicroseconds(40);
 }
 
 
@@ -366,7 +380,9 @@ void I2C_LCD::sendData(uint8_t value)
   _wire->write(LSN | _enable);
   _wire->write(LSN);
   _wire->endTransmission();
+  delayMicroseconds(40);
 }
+
 
 
 //  really needed for setup
@@ -382,8 +398,8 @@ void I2C_LCD::write4bits(uint8_t value)
   
   _wire->beginTransmission(_address);
   _wire->write(cmd | _enable);
-  // _wire->endTransmission();
-  // _wire->beginTransmission(_address);
+  _wire->endTransmission();
+  _wire->beginTransmission(_address);
   _wire->write(cmd);
   _wire->endTransmission();
 }

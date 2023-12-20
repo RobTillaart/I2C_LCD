@@ -34,7 +34,9 @@ public:
                    uint8_t backLight, uint8_t policy);
 
   //  only supports 5x8 char set for now.
+  //  blocks 100+ millisec to give device chance to reset
   void      begin(uint8_t cols = 20, uint8_t rows = 4);
+  bool      isConnected();
 
 
   //  BACKLIGHT
@@ -83,14 +85,20 @@ public:
   //  PRINT INTERFACE
   size_t    write(uint8_t c);
 
-  //  DEBUG
-  uint8_t   getCol() { return _pos; };  //  experimental
+  //  DEBUG  development
+  uint8_t   getCol() { return _pos; };  //  works.
+  uint32_t  getWriteCount()  { return _count; };  // works
+
+
+  //  EXPERIMENTAL
+
 
 
 private:
 
   void      sendData(uint8_t value);
   void      sendCommand(uint8_t value);
+  void      send(uint8_t value, bool flag);
   void      write4bits(uint8_t value);
 
   uint8_t   _address = 0;
@@ -108,14 +116,15 @@ private:
   uint8_t   _cols = 20;
   uint8_t   _rows = 4;
 
-  //  DISPLAYCONTROL bit always on
-  uint8_t   _displayControl = 0x08;  //  I2C_LCD_DISPLAYCONTROL
+  //  DISPLAYCONTROL bit always on, set in constructor.
+  uint8_t   _displayControl = 0;
   //  optimization
   bool      _pinsInOrder = true;
 
   //  overflow protection
   uint8_t   _pos = 0;
 
+  uint32_t  _count = 0;
 };
 
 

@@ -4,7 +4,7 @@
 //     URL: https://github.com/RobTillaart/I2C_LCD
 
 //  WARNING: do not overfeed your display with too much data
-//           too fast as it may not be able to handle 
+//           too fast as it may not be able to handle
 //           (mine got corrupted)
 
 
@@ -12,7 +12,6 @@
 #include "Wire.h"
 
 #include "I2C_LCD.h"
-//  #include "I2C_LCD_spectrum.h"
 
 //  test 20x4 + 16x2
 #define BACKLIGHT_PIN   3
@@ -27,7 +26,7 @@
 
 I2C_LCD lcd(39);
 
-uint8_t block[8][8] =
+uint8_t colblock[8][8] =
 {
   { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F },
   { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0x1F },
@@ -61,7 +60,7 @@ void setup()
 
   for (int i = 0; i < 8; i++)
   {
-    lcd.createChar(i, block[i]);
+    lcd.createChar(i, colblock[i]);
   }
 
   lcd.clear();
@@ -84,6 +83,10 @@ void loop()
 }
 
 
+//  this is not the most efficient algorithm as all
+//  data is written over and over.
+//  optimization only write the delta which could be zero
+//
 void spectrumColumn(uint8_t col, int value)
 {
   for (uint8_t row = 0; row < 4; row++)

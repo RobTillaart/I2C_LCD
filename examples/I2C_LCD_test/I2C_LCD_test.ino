@@ -35,19 +35,13 @@ void setup()
   lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN, POSITIVE);
 
   Wire.begin();
-  Wire.setClock(100000);
+  Wire.setClock(50000);
+
   lcd.begin(20, 4);
+  Serial.print("Connected: ");
+  Serial.println(lcd.isConnected());
 
-//  lcd.display();
-//  delay(1000);
-//  lcd.noDisplay();
-//  delay(1000);
-//  lcd.display();
-//
-//  lcd.clear();
-//  lcd.home();
   lcd.setCursor(3, 1);
-
   uint32_t start = micros();
   lcd.print(__TIME__);
   uint32_t stop = micros();
@@ -67,11 +61,13 @@ void setup()
 
 void loop()
 {
-  lcd.home();
-  lcd.print(millis());
-  delay(2000);
-  lcd.clear();
-  delay(1000);
+
+//  lcd.clear();
+//  lcd.setCursor(0, 0);
+//  lcd.print(millis());
+//  lcd.print(" ");
+//  lcd.print(lcd.getCol());
+//  delay(1000);
 }
 
 

@@ -1,10 +1,10 @@
 //    FILE: I2C_LCD_demo_spectrum_row.ino
 //  AUTHOR: Rob Tillaart
-// PURPOSE: demo I2C_LCD library
+// PURPOSE: demo I2C_LCD library a.k.a skyline demo
 //     URL: https://github.com/RobTillaart/I2C_LCD
 
 //  WARNING: do not overfeed your display with too much data
-//           too fast as it may not be able to handle 
+//           too fast as it may not be able to handle
 //           (mine got corrupted)
 
 
@@ -27,7 +27,7 @@
 
 I2C_LCD lcd(39);
 
-uint8_t block[5][8] =
+uint8_t rowBblock[5][8] =
 {
   { 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 },
   { 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18 },
@@ -58,7 +58,7 @@ void setup()
 
   for (int i = 0; i < 5; i++)
   {
-    lcd.createChar(i, block[i]);
+    lcd.createChar(i, rowBblock[i]);
   }
   delay(10);
   lcd.clear();
@@ -67,6 +67,19 @@ void setup()
     lcd.special(i);
   }
   lcd.clear();
+
+/*
+ * experimental^2
+  for (int i = 0; i < 80; i += 7)
+  {
+    spectrumRow2(1, i);
+  }
+  for (int i = 0; i < 80; i += 7)
+  {
+    spectrumRow2(1, 80 - i);
+  }
+*/
+
 
 }
 
@@ -82,6 +95,10 @@ void loop()
 }
 
 
+//  this is not the most efficient algorithm as all
+//  data is written over and over.
+//  optimization only write the delta which could be zero
+//
 void spectrumRow(uint8_t row, int value)
 {
   lcd.setCursor(0, row);
@@ -95,6 +112,60 @@ void spectrumRow(uint8_t row, int value)
     value -= 5;
     delay(1);
   }
+}
+
+
+//  experimental ^ 2
+//  not tested yet with display only on serial
+//  not perfect just better.
+void spectrumRow2(uint8_t row, int value)
+{
+  static uint8_t last[4] = { 255, 255, 255, 255 };
+  uint8_t start = 0;
+  uint8_t end = 20;
+
+  value = constrain(value, 0, 80);
+
+  lcd.setCursor(0, row);
+  lcd.print(value);
+  lcd.setCursor(4, row);
+  if (last[row] == value)
+  {
+  }
+  else if (last[row] == 255)
+  {
+    start = 0;
+    end = 16;
+  }
+  else if (last[row] <  value)
+  {
+    start = last[row] / 5;
+    end = value / 5 + 1;
+  }
+  else if (last[row] > value)
+  {
+    start = value / 5;
+    end = last[row] / 5 + 1;
+  }
+  last[row] = value;
+  value -= (start * 5);
+
+//  Serial.print(last[row]);
+//  Serial.print("\t");
+//  Serial.print(start);
+//  Serial.print("\t");
+//  Serial.print(end);
+//  Serial.println();
+
+  for (uint8_t col = start + 4; col < end + 4; col++)
+  {
+  if (value <= 0)      lcd.print(' ');
+  else if (value >= 5) lcd.special(4);
+  else                 lcd.special(value - 1);
+  value -= 5;
+  delay(1);
+  }
+
 }
 
 

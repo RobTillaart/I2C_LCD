@@ -96,6 +96,8 @@ mandatory address and optional alternative I2C bus.
                    uint8_t backlight, uint8_t policy)** pin configuration.
 Will change in the future.
 - **void begin(uint8_t cols = 20, uint8_t rows = 4)** initializes library size.
+User must call the appropriate **Wire.begin()** before calling **lcd.begin(()**
+- **bool isConnected()** returns true if address can be seen on the I2C bus chosen.
 
 
 #### Backlight
@@ -184,6 +186,9 @@ scrolling, right to left mode etc.
 So it can cause unwanted side effects, which can be fixed by removing
 the "pos < cols" condition from **write()**.
 
+- **uint8_t getCol()**
+
+The library does not track the row (yet)
 
 #### Tab printing
 
@@ -195,6 +200,16 @@ See the example.
 
 Idea for the future might be to set the tab-stops instead of current hardcoded ones.
 
+
+#### DEBUG getWriteCount()
+
+As I encountered problems during tests (display garbled) I added a counter 
+of the number of writes (each char => 5 bytes I2C).
+For now a development only, so will be removed in future.
+
+- **uint32_t getWriteCount()** idem.
+
+Not resetable (yet).
 
 
 ## Future
@@ -210,6 +225,7 @@ Idea for the future might be to set the tab-stops instead of current hardcoded o
 - test with other display sizes
 - test more
 - fix TODO's in code
+- investigate polarity
 
 #### Could
 

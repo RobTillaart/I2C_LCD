@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add clear() and display() to **begin()**
 - add default pins
 - update keywords.txt
+- add examples
+- add I2C_LIB_special_chars.h
+- and more
 
 
 ## [0.1.0] - 2023-12-16
