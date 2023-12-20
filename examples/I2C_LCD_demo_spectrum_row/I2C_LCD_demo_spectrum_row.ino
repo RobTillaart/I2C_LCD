@@ -27,7 +27,9 @@
 
 I2C_LCD lcd(39);
 
-uint8_t rowBblock[5][8] =
+
+//  for the row / horizontal bar we only need 5 characters.
+uint8_t rowBlock[5][8] =
 {
   { 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 },
   { 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18 },
@@ -35,6 +37,18 @@ uint8_t rowBblock[5][8] =
   { 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E },
   { 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F }
 };
+
+
+//  use this one and set in the spectrumRow space to underscore
+//
+// uint8_t rowBlock[5][8] =
+// {
+//   { 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x1F, 0x00 },
+//   { 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x1F, 0x00 },
+//   { 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x1F, 0x00 },
+//   { 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1E, 0x1F, 0x00 },
+//   { 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x00 }
+// };
 
 
 void setup()
@@ -58,7 +72,7 @@ void setup()
 
   for (int i = 0; i < 5; i++)
   {
-    lcd.createChar(i, rowBblock[i]);
+    lcd.createChar(i, rowBlock[i]);
   }
   delay(10);
   lcd.clear();
@@ -67,103 +81,106 @@ void setup()
     lcd.special(i);
   }
   lcd.clear();
+  delay(100);
 
-/*
- * experimental^2
-  for (int i = 0; i < 80; i += 7)
+  uint32_t start = millis();
+  for (int i = 0; i < 80; i += 1)
   {
-    spectrumRow2(1, i);
+    spectrumRow(1, i);
+    // delay(100);  //  uncomment to see it happen.
   }
-  for (int i = 0; i < 80; i += 7)
+  for (int i = 0; i < 80; i += 1)
   {
-    spectrumRow2(1, 80 - i);
+    spectrumRow(1, 80 - i);
+    // delay(100);
   }
-*/
+  uint32_t stop = millis();
+  Serial.println(stop - start);
+  lcd.setCursor(10, 1);
+  lcd.print(stop - start);
+  delay(100);
 
-
+  start = millis();
+  for (int i = 0; i < 80; i += 1)
+  {
+    spectrumRow2(2, i);
+    // delay(100);
+  }
+  for (int i = 0; i < 80; i += 1)
+  {
+    spectrumRow2(2, 80 - i);
+    // delay(100);
+  }
+  stop = millis();
+  Serial.println(stop - start);
+  lcd.setCursor(10, 2);
+  lcd.print(stop - start);
 }
 
 
 void loop()
 {
-  for (int i = 0; i < 4; i++)
-  {
-    spectrumRow(i, random(80));
-    delay(100);
-  }
-  delay(1000);
 }
 
 
 //  this is not the most efficient algorithm as all
-//  data is written over and over.
-//  optimization only write the delta which could be zero
-//
+//  whole row is written over and over.
+//  smallest footprint.
 void spectrumRow(uint8_t row, int value)
 {
+  value = constrain(value, 0, 80);
   lcd.setCursor(0, row);
   lcd.print(value);
+  lcd.print(' ');
   lcd.setCursor(4, row);
   for (uint8_t col = 4; col < 20; col++)
   {
-    if (value <= 0)      lcd.print(' ');
+    if (value <= 0)      lcd.print(' ');   // replace with _
     else if (value >= 5) lcd.special(4);
     else                 lcd.special(value - 1);
     value -= 5;
-    delay(1);
+    delay(1);  //  give time to print. might be reduced..
   }
 }
 
 
-//  experimental ^ 2
-//  not tested yet with display only on serial
-//  not perfect just better.
+//  up to 5 times faster
+//  only (re)draws the delta.
 void spectrumRow2(uint8_t row, int value)
 {
   static uint8_t last[4] = { 255, 255, 255, 255 };
   uint8_t start = 0;
-  uint8_t end = 20;
+  uint8_t end = 16;
 
   value = constrain(value, 0, 80);
+  if (last[row] != value)
+  {
+    lcd.setCursor(0, row);
+    lcd.print(value);
+    lcd.print(' ');
 
-  lcd.setCursor(0, row);
-  lcd.print(value);
-  lcd.setCursor(4, row);
-  if (last[row] == value)
-  {
-  }
-  else if (last[row] == 255)
-  {
-    start = 0;
-    end = 16;
-  }
-  else if (last[row] <  value)
-  {
-    start = last[row] / 5;
-    end = value / 5 + 1;
-  }
-  else if (last[row] > value)
-  {
-    start = value / 5;
-    end = last[row] / 5 + 1;
-  }
-  last[row] = value;
-  value -= (start * 5);
+    if (last[row] == 255)  //  first call.
+    {
+      start = 0;
+      end = 16;
+    }
+    else
+    {
+      start = min(last[row] / 5, value / 5);
+      end = max(last[row] / 5, value / 5) + 1;
+    }
+    lcd.setCursor(start + 4, row);
+    last[row] = value;
+    value -= (start * 5);
 
-//  Serial.print(last[row]);
-//  Serial.print("\t");
-//  Serial.print(start);
-//  Serial.print("\t");
-//  Serial.print(end);
-//  Serial.println();
-
-  for (uint8_t col = start + 4; col < end + 4; col++)
-  {
-  if (value <= 0)      lcd.print(' ');
-  else if (value >= 5) lcd.special(4);
-  else                 lcd.special(value - 1);
-  value -= 5;
-  delay(1);
+    for (uint8_t col = start + 4; col < end + 4; col++)
+    {
+      if (value <= 0)      lcd.print(' ');     // replace with _
+      else if (value >= 5) lcd.special(4);
+      else                 lcd.special(value - 1);
+      value -= 5;
+      delay(1);  //  give time to print. might be reduced..
+    }
   }
 
 }

@@ -239,6 +239,9 @@ Not resetable (yet).
   - FF => form feed is clear screen.
   - BELL => blink of the display  (oeps 7 is already a special char )
 - make a separate include file for charmaps by name.
+- lcd.center(row, char \* str);
+- lcd.rightAlign(col, row, pos, char \* str);
+
 
 #### Wont for now.
 
