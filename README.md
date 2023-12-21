@@ -192,12 +192,27 @@ See spectrum examples for how to use custom characters.
 
 Array writing not implemented as there are no gains seen.
 
-- **size_t center(row, char \* message)** centers a string on the defined row.
-- **size_t right(col, row, char \* message)** right align the string.
+Two helper functions, please note these work only with a char array.
+
+- **size_t center(uint8_t row, char \* message)** centers a string on the defined row.
+- **size_t right(uint8_t col, uint8_t row, char \* message)** right align a string.
 col is the align position.
 
 
 ## Experimental
+
+
+#### Tab printing
+
+When '\t' (character 9) is printed to the LCD, it moves to the first position
+that is a multiple of 4.
+This allows a simple way to get some sort of tabular data representation.
+See the example.
+
+Idea for the future might be to set the tab-stops instead of current hardcoded ones.
+
+
+## Debug
 
 #### Position tracking
 
@@ -217,18 +232,7 @@ the "pos < cols" condition from **write()**.
 The library does not track the row (yet)
 
 
-#### Tab printing
-
-Experimental, 
-When '\t' (character 9) is printed to the LCD, it moves to the first position
-that is a multiple of 4.
-This allows a simple way to get some sort of tabular data representation.
-See the example.
-
-Idea for the future might be to set the tab-stops instead of current hardcoded ones.
-
-
-#### DEBUG getWriteCount()
+#### getWriteCount()
 
 As I encountered problems during tests (display garbled) I added a counter 
 of the number of writes (each char => 5 bytes I2C).
