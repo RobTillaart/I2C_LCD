@@ -1,7 +1,7 @@
 //
 //    FILE: I2C_LCD.cpp
 //  AUTHOR: Rob.Tillaart@gmail.com
-// VERSION: 0.1.1
+// VERSION: 0.1.2
 //    DATE: 2023-12-16
 // PUPROSE: Arduino library for I2C_LCD
 //     URL: https://github.com/RobTillaart/I2C_LCD
@@ -9,7 +9,14 @@
 
 #include "I2C_LCD.h"
 
+//  40 us is a save value
+const uint8_t I2C_LCD_CHAR_DELAY = 40;
 
+
+///////////////////////////////////////////////////////
+//
+//  DO NOT CHANGE BELOW THIS LINE
+//
 //  keep defines compatible / recognizable
 //  the zero valued defines are not used.
 #define I2C_LCD_CLEARDISPLAY        0x01
@@ -36,6 +43,9 @@
 #define I2C_LCD_5x10DOTS            0x04
 
 
+
+
+
 I2C_LCD::I2C_LCD(uint8_t address, TwoWire * wire)
 {
   _address = address;
@@ -46,7 +56,7 @@ I2C_LCD::I2C_LCD(uint8_t address, TwoWire * wire)
 
 void I2C_LCD::config (uint8_t address, uint8_t enable, uint8_t readWrite, uint8_t registerSelect,
                       uint8_t data4, uint8_t data5, uint8_t data6, uint8_t data7,
-                      uint8_t backLight, uint8_t policy)  
+                      uint8_t backLight, uint8_t polarity)  
 {
   if (_address != address) return;  //  compatible?
   _enable         = ( 1 << enable);
@@ -57,7 +67,7 @@ void I2C_LCD::config (uint8_t address, uint8_t enable, uint8_t readWrite, uint8_
   _dataPin[2]     = ( 1 << data6);
   _dataPin[3]     = ( 1 << data7);
   _backLightPin   = ( 1 << backLight);
-  _backLightPol   = policy;
+  _backLightPol   = polarity;
 
   _pinsInOrder = ((data4 < data5) && (data5 < data6) && (data6 < data7));
 }
@@ -76,7 +86,7 @@ void I2C_LCD::begin(uint8_t cols, uint8_t rows)
 
   //  Figure 24 for procedure on 4-bit initialization
   //  wait for more than 15 ms
-  delay(60);  //  TODO optimize
+  delay(60);  //  TODO optimize?
 
   //  Force 4 bit mode
   write4bits(0x03);
@@ -109,17 +119,18 @@ bool I2C_LCD::isConnected()
 //
 //  BACKLIGHT
 //
-void I2C_LCD::setBacklightPin(uint8_t pin, uint8_t policy)
+void I2C_LCD::setBacklightPin(uint8_t pin, uint8_t polarity)
 {
   _backLightPin = ( 1 << pin);
-  _backLightPol = policy;
+  _backLightPol = polarity;
 }
 
 
 void I2C_LCD::setBacklight(bool on)
 {
-  _backLight = on;
-  display();
+  _backLight = (on == _backLightPol);
+  if (_backLight) display();
+  else noDisplay();
 }
 
 
@@ -303,6 +314,21 @@ size_t I2C_LCD::write(uint8_t c)
 };
 
 
+size_t I2C_LCD::center(uint8_t row, char * message)
+{
+  uint8_t len = strlen(message) + 1;
+  setCursor(10 - len/2, row);
+  return print(message);
+}
+
+
+size_t I2C_LCD::right(uint8_t col, uint8_t row, char * message)
+{
+  uint8_t len = strlen(message);
+  setCursor(col - len, row);
+  print(message);
+}
+
 
 //  TODO merge these two
 //  optimize 95% identical.
@@ -343,7 +369,7 @@ void I2C_LCD::sendCommand(uint8_t value)
   _wire->write(LSN | _enable);
   _wire->write(LSN);
   _wire->endTransmission();
-  delayMicroseconds(40);
+  delayMicroseconds(I2C_LCD_CHAR_DELAY);
 }
 
 
@@ -381,7 +407,7 @@ void I2C_LCD::sendData(uint8_t value)
   _wire->write(LSN | _enable);
   _wire->write(LSN);
   _wire->endTransmission();
-  delayMicroseconds(40);
+  delayMicroseconds(I2C_LCD_CHAR_DELAY);
 }
 
 

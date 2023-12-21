@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.1.2] - 2023-12-21
+- implement polarity backlight (and removed policy)
+- add **size_t center(row, char message[])**
+- fix keywords.txt
+
+
 ## [0.1.1] - 2023-12-18
 - add blink() and noBlink()
 - add cursor() and noCursor()

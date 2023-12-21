@@ -39,6 +39,20 @@ The reference:
 - https://github.com/fmalpartida/New-LiquidCrystal
 
 
+Additional functions not in the reference
+
+| name                  | description  |
+|:----------------------|:-------------|
+| isConnected()         | test if display address is seen on I2C bus.
+| clearEOL()            | clears line from current position
+| \t                    | printing of a tab char moves to next multiple of 4.
+| special(index)        | prints the customized char at index (0..7)
+| center(row, str)      | centers a char array on chosen row.
+| right(col, row, str)  | right align a char array from chosen position.
+| getColumn()           | get current column (develop only)
+| getWriteCount()       | returns bytes written (develop only)
+
+
 #### Compatibility
 
 Reasonable compatible with F. Malpartida's I2C library, relative minor differences
@@ -102,7 +116,7 @@ however the 0.1.1 is more robust as far as tested.
 mandatory address and optional alternative I2C bus.
 - **void config(uint8_t address, uint8_t enable, uint8_t readWrite, uint8_t registerSelect, 
                    uint8_t data4, uint8_t data5, uint8_t data6, uint8_t data7, 
-                   uint8_t backlight, uint8_t policy)** pin configuration.
+                   uint8_t backlight, uint8_t polarity)** pin configuration.
 Will change in the future.
 - **void begin(uint8_t cols = 20, uint8_t rows = 4)** initializes library size.
 User must call the appropriate **Wire.begin()** before calling **lcd.begin(()**
@@ -111,8 +125,7 @@ User must call the appropriate **Wire.begin()** before calling **lcd.begin(()**
 
 #### Backlight
 
-- **void setBacklightPin (uint8_t pin, uint8_t policy)**
- policy not implemented yet.
+- **void setBacklightPin(uint8_t pin, uint8_t polarity)** idem.
 - **void setBacklight(bool on)** idem.
 - **void backlight()** wrapper for setBacklight()
 - **void noBacklight()** wrapper for setBacklight()
@@ -160,11 +173,10 @@ The next 4 have only limited support
 #### Create your own characters
 
 A charmap consists of an array of 8 bytes with values 0..31 (5 bits).
-There are 8 slots to place a special character, indec 0..7.
+There are 8 slots to place a special character, index 0..7.
 
 - **void createChar(uint8_t index, uint8_t \* charmap)**
 - **size_t special(uint8_t index)** to print the special char.
-
 
 index = 0..7,  charmap = 8 bytes (0..31)
 
@@ -178,6 +190,10 @@ To be printed with
 - **size_t write(uint8_t c)**
 
 Array writing not implemented as there are no gains seen.
+
+- **size_t center(row, char \* message)** centers a string on the defined row.
+- **size_t right(col, row, char \* message)** right align the string.
+col is the align position.
 
 
 ## Experimental
@@ -229,14 +245,11 @@ Not reset-able (yet).
 
 #### Should
 
+- fix TODO's in code
 - test, test, test
 - test with other platforms
 - test with other display sizes
-- test more
-- fix TODO's in code
-- investigate/implement polarity
 - merge low level transport into one if possible
-- add table of new functions not in the reference.
 
 
 #### Could
@@ -245,20 +258,18 @@ Not reset-able (yet).
   - Wire1, Wire2 etc
 - make an issue for New-LiquidCrystal library.
 - function to define the tab-stops, instead of hard coded ones.
-- investigate other special characters to support, like
-  - \r => goto begin of current line
-  - \n => goto begin of next line
-  - FF => form feed is clear screen.
-  - BELL => blink of the display  (oeps 7 is already a special char )
 - make a separate include file for charmaps by name.
-- lcd.center(row, char \* str);
-- lcd.rightAlign(col, row, pos, char \* str);
 
 
 #### Wont for now.
 
 - implement unit tests (possible?)
 - add timestamp last print
+- investigate other special characters to support, like
+  - \r => goto begin of current line
+  - \n => goto begin of next line
+  - FF => form feed is clear screen.
+  - BELL => blink of the display  (oeps 7 is already a special char )
 
 
 ## Support
