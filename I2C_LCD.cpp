@@ -351,7 +351,6 @@ void I2C_LCD::send(uint8_t value, bool dataFlag)
   if (_backLight) MSN |= _backLightPin;
   uint8_t LSN = MSN;
 
-  //  if pins are in the right order optimization.
   if (_pinsInOrder)
   {
     MSN |= value & 0xF0;
@@ -359,17 +358,15 @@ void I2C_LCD::send(uint8_t value, bool dataFlag)
   }
   else
   {
-    uint8_t tmp = value >> 4;
     for ( uint8_t i = 0; i < 4; i++ )
     {
-      if ( tmp & 0x01 ) MSN |= _dataPin[i];
-      tmp >>= 1;
+      if ( value & 0x01 ) LSN |= _dataPin[i];
+      value >>= 1;
     }
-    tmp = value & 0x0F;
     for ( uint8_t i = 0; i < 4; i++ )
     {
-      if ( tmp & 0x01 ) LSN |= _dataPin[i];
-      tmp >>= 1;
+      if ( value & 0x01 ) MSN |= _dataPin[i];
+      value >>= 1;
     }
   }
 

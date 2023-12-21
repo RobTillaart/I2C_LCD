@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add **size_t center(uint8_t row, const char \* message)**
 - add **size_t right(uint8_t col, uint8_t row, const char \* message)**
 - merged low level code reducing footprint.
+- optimized low level code when pins are not in ascending order (minor).
 - add examples
 - fix keywords.txt
 - update readme.md

@@ -59,7 +59,7 @@ Furthermore the current version does not support all functionality, and
 more important it is not tested as much as the reference.
 Only the 5x8 font is supported.
 
-So if you need full functionality, robustness or reliability, you still should use 
+So if you need full functionality, robustness or reliability, you should use 
 the reference **New-liquidCrystal** library.
 
 
@@ -78,7 +78,7 @@ it is far easier to get the nibble (half bytes) to send.
 
 First performance tests are good. See example **I2C_LCD_performance.ino**.
 
-The performance measurement is done on an UNO, pins are in order, 0.1.0 version.
+The performance measurement is done on an UNO, data pins are in ascending order.
 
 |  I2C clock  |    0.1.0    |    0.1.1    |  notes  |
 |:-----------:|:-----------:|:-----------:|:-------:|
@@ -93,17 +93,18 @@ The performance measurement is done on an UNO, pins are in order, 0.1.0 version.
 
 Note 1: 0.1.0 problems with spectrum examples - too much data too fast killed my display.
 
-Timing in the 0.1.1 version is roughly 10% slower than 0.1.0, 
-however the 0.1.1 is more robust as far as tested.
+Timing in the 0.1.1 version is roughly 400 us slower than 0.1.0 for 8 characters.
+However the 0.1.1 is more robust as far as tested.
 
-Performance is also a matter of developing an optimal algorithm.
+Note: Performance is also a matter of developing an optimal algorithm.
 This is often a trade between code size, memory used and speed.
 See **I2C_LCD_demo_spectrum_row.ino** for an example.
 
 
 #### Related
 
-- https://github.com/fmalpartida/New-LiquidCrystal
+- https://github.com/fmalpartida/New-LiquidCrystal The reference.
+- https://github.com/RobTillaart/ANSI for VT100 alike terminals.
 
 
 ## Interface
