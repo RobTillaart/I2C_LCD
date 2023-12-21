@@ -78,15 +78,14 @@ void I2C_LCD::begin(uint8_t cols, uint8_t rows)
   _cols = cols;
   _rows = rows;
 
-  //  ALL LOW.
+  //  ALL LINES LOW.
   _wire->beginTransmission(_address);
-  _wire->write(0x00);
   _wire->write(0x00);
   _wire->endTransmission();
 
   //  Figure 24 for procedure on 4-bit initialization
   //  wait for more than 15 ms
-  delay(60);  //  no need to optimize as this is called only once.
+  delay(100);  //  no need to optimize as this is called only once.
 
   //  Force 4 bit mode
   write4bits(0x03);
@@ -383,7 +382,7 @@ void I2C_LCD::send(uint8_t value, bool dataFlag)
 //  needed for setup
 void I2C_LCD::write4bits(uint8_t value) 
 {
-  uint8_t cmd = _backLight;
+  uint8_t cmd = 0;
 
   for ( uint8_t i = 0; i < 4; i++ )
   {

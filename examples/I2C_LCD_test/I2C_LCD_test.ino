@@ -41,8 +41,8 @@ void setup()
   Serial.print("Connected: ");
   Serial.println(lcd.isConnected());
 
-
   lcd.clear();
+  
   lcd.setBacklightPin(BACKLIGHT_PIN, POSITIVE);
   lcd.setBacklight(1);
   delay(1000);
