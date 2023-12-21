@@ -217,6 +217,7 @@ the "pos < cols" condition from **write()**.
 
 The library does not track the row (yet)
 
+
 #### Tab printing
 
 Experimental, 
@@ -236,7 +237,7 @@ For now a development only, so expect it to be removed in future.
 
 - **uint32_t getWriteCount()** idem.
 
-Not reset-able (yet).
+Not reset-able.
 
 
 ## Future
@@ -247,7 +248,6 @@ Not reset-able (yet).
 
 #### Should
 
-- fix TODO's in code
 - test, test, test
 - test with other platforms
 - test with other display sizes
@@ -259,7 +259,7 @@ Not reset-able (yet).
 - make an issue for New-LiquidCrystal library.
 - function to define the tab-stops, instead of hard coded ones.
 - make a separate include file for charmaps by name.
-- investigate reading busy flag over I2C (first attempts did not work).
+- investigate reading busy flag over I2C.
 
 
 #### Wont for now.
