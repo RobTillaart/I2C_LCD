@@ -326,7 +326,7 @@ size_t I2C_LCD::right(uint8_t col, uint8_t row, char * message)
 {
   uint8_t len = strlen(message);
   setCursor(col - len, row);
-  print(message);
+  return print(message);
 }
 
 
