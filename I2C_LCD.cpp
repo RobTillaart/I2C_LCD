@@ -86,7 +86,7 @@ void I2C_LCD::begin(uint8_t cols, uint8_t rows)
 
   //  Figure 24 for procedure on 4-bit initialization
   //  wait for more than 15 ms
-  delay(20);  //  no need to optimize as this is called only once.
+  delay(60);  //  no need to optimize as this is called only once.
 
   //  Force 4 bit mode
   write4bits(0x03);
@@ -286,10 +286,7 @@ void I2C_LCD::createChar(uint8_t index, uint8_t * charmap)
 }
 
 
-//////////////////////////////////////////////////////////
-//
-//  PRIVATE
-//
+
 size_t I2C_LCD::write(uint8_t c)
 {
   size_t n = 0;
@@ -330,53 +327,31 @@ size_t I2C_LCD::right(uint8_t col, uint8_t row, const char * message)
 }
 
 
-//  TODO merge these two
-//  optimize 95% identical.
+//////////////////////////////////////////////////////////
+//
+//  PRIVATE
+//
 void I2C_LCD::sendCommand(uint8_t value)
 {
-  uint8_t MSN = 0;
-  if (_backLight)  MSN |= _backLightPin;
-  uint8_t LSN = MSN;
-
-  //  pins are in the right order optimization.
-  if (_pinsInOrder)
-  {
-    MSN |= value & 0xF0;
-    LSN |= value << 4;
-  }
-  else
-  {
-    uint8_t tmp = value >> 4;
-    for ( uint8_t i = 0; i < 4; i++ )
-    {
-      if ( tmp & 0x01 ) MSN |= _dataPin[i];
-      tmp >>= 1;
-    }
-    tmp = value & 0x0F;
-    for ( uint8_t i = 0; i < 4; i++ )
-    {
-      if ( tmp & 0x01 ) LSN |= _dataPin[i];
-      tmp >>= 1;
-    }
-  }
-
-  _wire->beginTransmission(_address);
-  _wire->write(MSN | _enable);
-  _wire->write(MSN);
-  _wire->write(LSN | _enable);
-  _wire->write(LSN);
-  _wire->endTransmission();
-  delayMicroseconds(I2C_LCD_CHAR_DELAY);
+  send(value, false);
 }
 
 
 void I2C_LCD::sendData(uint8_t value)
 {
-  uint8_t MSN = _registerSelect;
+  send(value, true);
+}
+
+
+void I2C_LCD::send(uint8_t value, bool dataFlag)
+{
+  //  calculate both most and least significant nibble
+  uint8_t MSN = 0;
+  if (dataFlag)   MSN = _registerSelect;
   if (_backLight) MSN |= _backLightPin;
   uint8_t LSN = MSN;
 
-  //  if pins are in the right order speed up.
+  //  if pins are in the right order optimization.
   if (_pinsInOrder)
   {
     MSN |= value & 0xF0;
@@ -408,8 +383,7 @@ void I2C_LCD::sendData(uint8_t value)
 }
 
 
-
-//  really needed for setup
+//  needed for setup
 void I2C_LCD::write4bits(uint8_t value) 
 {
   uint8_t cmd = _backLight;

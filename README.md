@@ -251,7 +251,6 @@ Not reset-able (yet).
 - test, test, test
 - test with other platforms
 - test with other display sizes
-- merge low level transport into one if possible
 
 
 #### Could

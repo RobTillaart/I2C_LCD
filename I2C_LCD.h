@@ -96,7 +96,7 @@ private:
 
   void      sendData(uint8_t value);
   void      sendCommand(uint8_t value);
-  void      send(uint8_t value, bool flag);
+  void      send(uint8_t value, bool dataFlag);
   void      write4bits(uint8_t value);
 
   uint8_t   _address = 0;

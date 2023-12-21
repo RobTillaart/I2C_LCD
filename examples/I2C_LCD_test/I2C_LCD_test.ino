@@ -35,7 +35,7 @@ void setup()
   // lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN, POSITIVE);
 
   Wire.begin();
-  Wire.setClock(100000);
+  Wire.setClock(400000);
 
   lcd.begin(20, 4);
   Serial.print("Connected: ");
@@ -85,14 +85,11 @@ void setup()
     lcd.print(c);
   }
   delay(2000);
-
-
 }
 
 
 void loop()
 {
-
   //  lcd.clear();
   //  lcd.setCursor(0, 0);
   //  lcd.print(millis());

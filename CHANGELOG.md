@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - implement polarity backlight (and removed policy)
 - add **size_t center(uint8_t row, const char \* message)**
 - add **size_t right(uint8_t col, uint8_t row, const char \* message)**
+- merged low level code reducing footprint.
 - add examples
 - fix keywords.txt
 - update readme.md
