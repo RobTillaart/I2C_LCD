@@ -177,15 +177,13 @@ The next 4 have only limited support
 
 A charmap consists of an array of 8 bytes with values 0..31 (5 bits).
 There are 8 slots to place a special character, index 0..7.
+The custom characters can be printed with **special(index)** which is 
+a wrapper around **write((uint8_t)index)**
 
 - **void createChar(uint8_t index, uint8_t \* charmap)**
 - **size_t special(uint8_t index)** to print the special char.
 
-index = 0..7,  charmap = 8 bytes (0..31)
-
-To be printed with 
-- **lcd.write((uint8_t)index)** or simpler
-- **lcd.special(index)** wrapper.
+See spectrum examples for how to use custom characters.
 
 
 #### Print interface
