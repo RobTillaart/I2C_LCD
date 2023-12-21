@@ -50,8 +50,8 @@ void setup()
   delay(1000);
   lcd.setBacklight(1);
 
-
-  lcd.center(0, "1234567890");
+  char buf[24] = "1234567890";
+  lcd.center(0, buf);
   lcd.center(1, "123456789");
   lcd.center(2, "23456789");
   lcd.center(3, "2345678");

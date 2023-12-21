@@ -49,8 +49,6 @@ Additional functions not in the reference
 | special(index)        | prints the customized char at index (0..7)
 | center(row, str)      | centers a char array on chosen row.
 | right(col, row, str)  | right align a char array from chosen position.
-| getColumn()           | get current column (develop only)
-| getWriteCount()       | returns bytes written (develop only)
 
 
 #### Compatibility
@@ -97,6 +95,10 @@ Note 1: 0.1.0 problems with spectrum examples - too much data too fast killed my
 
 Timing in the 0.1.1 version is roughly 10% slower than 0.1.0, 
 however the 0.1.1 is more robust as far as tested.
+
+Performance is also a matter of developing an optimal algorithm.
+This is often a trade between code size, memory used and speed.
+See **I2C_LCD_demo_spectrum_row.ino** for an example.
 
 
 #### Related
@@ -255,10 +257,10 @@ Not reset-able (yet).
 #### Could
 
 - add examples
-  - Wire1, Wire2 etc
 - make an issue for New-LiquidCrystal library.
 - function to define the tab-stops, instead of hard coded ones.
 - make a separate include file for charmaps by name.
+- investigate reading busy flag over I2C (first attempts did not work).
 
 
 #### Wont for now.

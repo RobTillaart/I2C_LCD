@@ -86,7 +86,7 @@ void I2C_LCD::begin(uint8_t cols, uint8_t rows)
 
   //  Figure 24 for procedure on 4-bit initialization
   //  wait for more than 15 ms
-  delay(60);  //  TODO optimize?
+  delay(20);  //  no need to optimize as this is called only once.
 
   //  Force 4 bit mode
   write4bits(0x03);
@@ -314,7 +314,7 @@ size_t I2C_LCD::write(uint8_t c)
 };
 
 
-size_t I2C_LCD::center(uint8_t row, char * message)
+size_t I2C_LCD::center(uint8_t row, const char * message)
 {
   uint8_t len = strlen(message) + 1;
   setCursor(10 - len/2, row);
@@ -322,16 +322,13 @@ size_t I2C_LCD::center(uint8_t row, char * message)
 }
 
 
-size_t I2C_LCD::right(uint8_t col, uint8_t row, char * message)
+size_t I2C_LCD::right(uint8_t col, uint8_t row, const char * message)
 {
   uint8_t len = strlen(message);
   setCursor(col - len, row);
   return print(message);
 }
 
-
-//  TODO merge these two
-//  optimize 95% identical.
 
 //  TODO merge these two
 //  optimize 95% identical.

@@ -8,8 +8,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.1.2] - 2023-12-21
 - implement polarity backlight (and removed policy)
-- add **size_t center(row, char message[])**
+- add **size_t center(uint8_t row, const char \* message)**
+- add **size_t right(uint8_t col, uint8_t row, const char \* message)**
+- add examples
 - fix keywords.txt
+- update readme.md
 
 
 ## [0.1.1] - 2023-12-18

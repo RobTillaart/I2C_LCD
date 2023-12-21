@@ -46,6 +46,7 @@ special	KEYWORD2
 # PRINT API
 write	KEYWORD2
 center	KEYWORD2
+right	KEYWORD2
 
 
 # DEBUG
