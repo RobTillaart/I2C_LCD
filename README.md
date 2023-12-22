@@ -161,8 +161,10 @@ Minimal tested.
 
 - **void scrollDisplayLeft(void)**
 - **void scrollDisplayRight(void)**
-- **void moveCursorRight(void)**
-- **void moveCursorLeft(void)**
+- **void moveCursorRight(uint8_t n = 1)** moves cursor n places to right or
+until end of line reached.
+- **void moveCursorLeft(uint8_t n = 1)** moves cursor n places to left or
+until start of line reached.
 
 The next 4 have only limited support  
 (either autoscroll or leftright can be set, not both)
@@ -252,14 +254,12 @@ Not reset-able.
 #### Should
 
 - test, test, test
-- test with other platforms
-- test with other display sizes
+- test other platforms
+- test other display sizes.
 
 
 #### Could
 
-- add examples
-- make an issue for New-LiquidCrystal library.
 - function to define the tab-stops, instead of hard coded ones.
 - make a separate include file for charmaps by name.
 - investigate reading busy flag over I2C.
@@ -270,8 +270,8 @@ Not reset-able.
 - implement unit tests (possible?)
 - add timestamp last print
 - investigate other special characters to support, like
-  - \r => goto begin of current line
-  - \n => goto begin of next line
+  - \r => go to begin of current line.
+  - \n => go to begin of next line.
   - FF => form feed is clear screen.
   - BELL => blink of the display  (oeps 7 is already a special char )
 
