@@ -91,9 +91,6 @@ public:
   uint8_t   getColumn() { return _pos; };  //  works.
   uint32_t  getWriteCount()  { return _count; };  // works
 
-  //  EXPERIMENTAL
-  uint8_t read(); //  not working
-
 
 private:
 

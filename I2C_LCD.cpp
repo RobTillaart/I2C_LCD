@@ -156,7 +156,7 @@ void I2C_LCD::clear()
 {
   sendCommand(I2C_LCD_CLEARDISPLAY);
   _pos = 0;
-  delay(2);
+  // delay(2);
 }
 
 
@@ -356,15 +356,6 @@ size_t I2C_LCD::right(uint8_t col, uint8_t row, const char * message)
   uint8_t len = strlen(message);
   setCursor(col - len, row);
   return print(message);
-}
-
-
-//  experimental playground
-uint8_t I2C_LCD::read()
-{
-  return 0;
-  _wire->requestFrom(_address, (uint8_t)1);
-  return _wire->read();
 }
 
 
