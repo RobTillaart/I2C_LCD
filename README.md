@@ -278,6 +278,7 @@ Not reset-able.
 - function to define the tab-stops, instead of hard coded ones.
 - make a separate include file for charmaps by name.
 - investigate reading busy flag over I2C.
+- convenience **repeat(char c, uint8_t times)**
 
 
 #### Wont for now.

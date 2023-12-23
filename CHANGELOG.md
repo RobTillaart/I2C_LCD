@@ -7,11 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.1.3] - 2023-12-22
-- add support for 16x4 + 10x4 display
+- add support for **16x4** + **10x4** display
 - minimized footprint **setCursor()**
 - add parameter to **moveCursorLeft(uint8_t n = 1)**
 - add parameter to **moveCursorRight(uint8_t n = 1)**
-- minor edits.
+- improve timing
+- update examples
+- minor edits
 
 
 ## [0.1.2] - 2023-12-21
