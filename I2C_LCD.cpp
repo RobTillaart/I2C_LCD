@@ -9,8 +9,9 @@
 
 #include "I2C_LCD.h"
 
-//  40 us is a save value
-const uint8_t I2C_LCD_CHAR_DELAY = 40;
+//  40 us is a save value at any speed.
+//  20 us is a save value for I2C at 400K.
+const uint8_t I2C_LCD_CHAR_DELAY = 0;
 
 
 ///////////////////////////////////////////////////////
@@ -156,7 +157,7 @@ void I2C_LCD::clear()
 {
   sendCommand(I2C_LCD_CLEARDISPLAY);
   _pos = 0;
-  // delay(2);
+  delay(2);
 }
 
 
@@ -313,7 +314,7 @@ void I2C_LCD::createChar(uint8_t index, uint8_t * charmap)
   for (uint8_t i = 0; i < 8; i++)
   {
     _pos = 0;
-    write(charmap[i]);
+    sendData(charmap[i]);
   }
   _pos = tmp;
 }
@@ -324,7 +325,7 @@ size_t I2C_LCD::write(uint8_t c)
   size_t n = 0;
   if (c == (uint8_t)'\t')  //  TAB char
   {
-    while ((_pos % 4) != 0)
+    while (((_pos % 4) != 0) && (_pos < _cols))
     {
       moveCursorRight();   //  increases _pos.
       n++;
@@ -335,11 +336,10 @@ size_t I2C_LCD::write(uint8_t c)
   {
     sendData(c);
     _pos++;
-    n++;
-    return n;
+    return 1;
   }
-  //  else blink backlight to indicate error?
-  return n;
+  //  not allowed to print.
+  return 0;
 };
 
 
@@ -408,7 +408,7 @@ void I2C_LCD::send(uint8_t value, bool dataFlag)
   _wire->write(LSN | _enable);
   _wire->write(LSN);
   _wire->endTransmission();
-  delayMicroseconds(I2C_LCD_CHAR_DELAY);
+  if (I2C_LCD_CHAR_DELAY) delayMicroseconds(I2C_LCD_CHAR_DELAY);
 }
 
 

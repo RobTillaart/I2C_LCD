@@ -96,6 +96,24 @@ Note 1: 0.1.0 problems with spectrum examples - too much data too fast killed my
 Timing in the 0.1.1 version is roughly 400 us slower than 0.1.0 for 8 characters.
 However the 0.1.1 is more robust as far as tested.
 
+In the file **I2C_LCD.cpp** there is this line you can tune the hard delay
+in microseconds after every character.
+
+```cpp
+//  40 us is a save value at any speed.
+//  20 us is a save value for I2C at 400K.
+const uint8_t I2C_LCD_CHAR_DELAY = 20;
+```
+
+The datasheet states one need the 37 us so 40 us is a very safe value.
+However the I2C at 400K takes at least 40 us to send an address and the first 4 bits.
+So 20 us is a safe value, and 10 us or even 0 us should work well.
+The math above does not include other overhead like preparing the bits etc.
+At 100K the I2C for 2 bytes takes 160 us, so it can safely set to 0.
+
+
+
+
 Note: Performance is also a matter of developing an optimal algorithm.
 This is often a trade between code size, memory used and speed.
 See **I2C_LCD_demo_spectrum_row.ino** for an example.
@@ -192,8 +210,6 @@ See spectrum examples for how to use custom characters.
 
 - **size_t write(uint8_t c)**
 
-Array writing not implemented as there are no gains seen.
-
 Two helper functions, please note these work only with a char array.
 
 - **size_t center(uint8_t row, char \* message)** centers a string on the defined row.
@@ -253,10 +269,9 @@ Not reset-able.
 
 #### Should
 
-- test, test, test
-- test other platforms
+- test, test, test.
+- test other platforms.
 - test other display sizes.
-
 
 #### Could
 
@@ -267,6 +282,7 @@ Not reset-able.
 
 #### Wont for now.
 
+- **size_t write(array, length)** is not implemented as there was no gain.
 - implement unit tests (possible?)
 - add timestamp last print
 - investigate other special characters to support, like
