@@ -11,20 +11,12 @@
 
 # I2C_LCD
 
-Arduino library for I2C_LCD  LCD displays.
-
-
-**Warning: experimental with side effects, use at own risk**
-
-do not overfeed your display with too much data
-too fast as it may not be able to handle.
-During longer tests my 20x4 display garbled too often. 
-Under investigation.
+Arduino library for I2C_LCD LCD displays.
 
 
 ## Description
 
-**Experimental** Arduino library for the I2C LCD display, typical 20x4 characters.
+**Experimental** Arduino library for the I2C LCD display, typical **20x4** characters.
 
 The library is inspired by the excellent LiquidCrystel_I2C library of F. Malpartida. 
 Therefore the interface is kept quite identical, extended with some additional functions.
@@ -65,7 +57,12 @@ the reference **New-liquidCrystal** library.
 
 #### Tests
 
-Tested on an UNO and a 20x4 character LCD, and limited on a 16x2 LCD.
+Tested on an UNO and a **20x4** character LCD, and limited on a **16x2** LCD.
+
+The versions 0.1.0 and 0.1.1 were not stable and gave a garbled display. 
+It looked like the data came too fast for the display to handle.
+The problems seems to be solved since version 0.1.2 as the problem did not
+occur any more.
 
 
 ## Performance
@@ -111,8 +108,7 @@ So 20 us is a safe value, and 10 us or even 0 us should work well.
 The math above does not include other overhead like preparing the bits etc.
 At 100K the I2C for 2 bytes takes 160 us, so it can safely set to 0.
 
-
-
+Setting the delay to zero, gives roughly the 0.1.0 timing again.
 
 Note: Performance is also a matter of developing an optimal algorithm.
 This is often a trade between code size, memory used and speed.
