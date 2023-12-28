@@ -53,6 +53,7 @@ void setup()
 
   lcd.config(39, En_pin, Rw_pin, Rs_pin, D4_pin, D5_pin, D6_pin, D7_pin, BACKLIGHT_PIN, POSITIVE);
 
+  delay(80);
   Wire.begin();
   Wire.setClock(100000);
   lcd.begin(20, 4);
@@ -66,9 +67,12 @@ void setup()
   lcd.setCursor(0, 0);
 
   lcd.setCursor(0, 0);
-  lcd.print(" SPECTRUM  ANALYZER ");
+  lcd.print("SPECTRUM  ANALYZER ");
   lcd.setCursor(0, 1);
   lcd.print(" LEFT         RIGHT ");
+
+  lcd.setCursor(0, 3);
+  lcd.repeat('=', 20);
 }
 
 

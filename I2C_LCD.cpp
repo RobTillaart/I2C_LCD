@@ -167,7 +167,7 @@ void I2C_LCD::clear()
 
 void I2C_LCD::clearEOL()
 {
-  for (int i = _pos; i < _cols; i++)
+  while(_pos  < _cols)
   {
     print(' ');
   }
@@ -350,7 +350,7 @@ size_t I2C_LCD::write(uint8_t c)
 size_t I2C_LCD::center(uint8_t row, const char * message)
 {
   uint8_t len = strlen(message) + 1;
-  setCursor(10 - len/2, row);
+  setCursor((_cols - len) / 2, row);
   return print(message);
 }
 
@@ -360,6 +360,17 @@ size_t I2C_LCD::right(uint8_t col, uint8_t row, const char * message)
   uint8_t len = strlen(message);
   setCursor(col - len, row);
   return print(message);
+}
+
+
+size_t I2C_LCD::repeat(uint8_t c, uint8_t times)
+{
+  size_t n = 0;
+  while((times--) && (_pos < _cols)) 
+  {
+    n += write(c);
+  }
+  return n;
 }
 
 

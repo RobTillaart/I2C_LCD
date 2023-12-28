@@ -81,6 +81,8 @@ public:
   size_t    write(uint8_t c);
   size_t    center(uint8_t row, const char * message);
   size_t    right(uint8_t col, uint8_t row, const char * message);
+  size_t    repeat(uint8_t c, uint8_t times);
+
 
   //  DEBUG  development
   uint8_t   getColumn() { return _pos; };  //  works.

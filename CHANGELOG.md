@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.1.4] - 2023-12-28
 - changed return type of **begin()**. Returns false if LCD not found on I2C bus.
 - made initialization delay(100) in **begin()** a bit smarter.
+- add **repeat(c, times)**
+- fix **center()** for non 20x4 LCD.
 - add examples
 
 

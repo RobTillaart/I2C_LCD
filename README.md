@@ -77,16 +77,16 @@ First performance tests are good. See example **I2C_LCD_performance.ino**.
 
 The performance measurement is done on an UNO, data pins are in ascending order.
 
-|  I2C clock  |    0.1.0    |    0.1.1    |  notes  |
-|:-----------:|:-----------:|:-----------:|:-------:|
-|  100000     |     4316    |     4640    |
-|  200000     |     2440    |     2760    |
-|  300000     |     1780    |     2108    |
-|  400000     |     1496    |     1820    |  (1)
-|  500000     |     1308    |     1632    |
-|  600000     |     1176    |     1500    |
-|  700000     |     1076    |     1400    |
-|  800000     |     1024    |     1348    |
+|  I2C clock  |    0.1.0    |    0.1.1    |    0.1.4    |  notes  |
+|:-----------:|:-----------:|:-----------:|:-----------:|:-------:|
+|  100000     |     4316    |     4640    |     4312    |
+|  200000     |     2440    |     2760    |     2456    |
+|  300000     |     1780    |     2108    |     1792    |
+|  400000     |     1496    |     1820    |     1512    |  (1)
+|  500000     |     1308    |     1632    |     1324    |
+|  600000     |     1176    |     1500    |     1188    |
+|  700000     |     1076    |     1400    |     1084    |
+|  800000     |     1024    |     1348    |     1040    |
 
 Note 1: 0.1.0 problems with spectrum examples - too much data too fast killed my display.
 
@@ -108,7 +108,7 @@ So 20 us is a safe value, and 10 us or even 0 us should work well.
 The math above does not include other overhead like preparing the bits etc.
 At 100K the I2C for 2 bytes takes 160 us, so it can safely set to 0.
 
-Setting the delay to zero, gives roughly the 0.1.0 timing again.
+Setting the delay to zero (0.1.4), gives roughly the 0.1.0 timing again.
 
 Note: Performance is also a matter of developing an optimal algorithm.
 This is often a trade between code size, memory used and speed.
