@@ -4,7 +4,7 @@
 //     URL: https://github.com/RobTillaart/I2C_LCD
 
 //  WARNING: do not overfeed your display with too much data
-//           too fast as it may not be able to handle 
+//           too fast as it may not be able to handle
 //           (mine got corrupted)
 
 
@@ -56,7 +56,7 @@ void setup()
   Wire.begin();
   Wire.setClock(100000);
   lcd.begin(20, 4);
-  
+
   for (int i = 0; i < 8; i++)
   {
     lcd.createChar(i, block[i]);

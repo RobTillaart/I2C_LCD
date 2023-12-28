@@ -2,24 +2,19 @@
 //
 //    FILE: I2C_LCD.h
 //  AUTHOR: Rob.Tillaart@gmail.com
-// VERSION: 0.1.3
+// VERSION: 0.1.4
 //    DATE: 2023-12-16
 // PUPROSE: Arduino library for I2C_LCD
 //     URL: https://github.com/RobTillaart/I2C_LCD
 
 
-#define I2C_LCD_LIB_VERSION     (F("0.1.3"))
+#define I2C_LCD_LIB_VERSION     (F("0.1.4"))
 
 #include "Arduino.h"
 #include "Wire.h"
 
-#ifndef POSITIVE
-#define POSITIVE 1
-#endif
-
-#ifndef NEGATIVE
-#define NEGATIVE 0
-#endif
+const uint8_t POSITIVE = 1;
+const uint8_t NEGATIVE = 0;
 
 
 class I2C_LCD : public Print
@@ -34,8 +29,8 @@ public:
                    uint8_t backLight, uint8_t polarity);
 
   //  only supports 5x8 char set for now.
-  //  blocks 100+ millisec to give device chance to reset
-  void      begin(uint8_t cols = 20, uint8_t rows = 4);
+  //  blocks up to 100 milliseconds to give LCD time to boot
+  bool      begin(uint8_t cols = 20, uint8_t rows = 4);
   bool      isConnected();
 
 

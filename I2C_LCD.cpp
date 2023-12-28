@@ -1,7 +1,7 @@
 //
 //    FILE: I2C_LCD.cpp
 //  AUTHOR: Rob.Tillaart@gmail.com
-// VERSION: 0.1.3
+// VERSION: 0.1.4
 //    DATE: 2023-12-16
 // PUPROSE: Arduino library for I2C_LCD
 //     URL: https://github.com/RobTillaart/I2C_LCD
@@ -71,10 +71,12 @@ void I2C_LCD::config (uint8_t address, uint8_t enable, uint8_t readWrite, uint8_
 }
 
 
-void I2C_LCD::begin(uint8_t cols, uint8_t rows)
+bool I2C_LCD::begin(uint8_t cols, uint8_t rows)
 {
   _cols = cols;
   _rows = rows;
+
+  if (isConnected() == false) return false;
 
   //  ALL LINES LOW.
   _wire->beginTransmission(_address);
@@ -83,7 +85,8 @@ void I2C_LCD::begin(uint8_t cols, uint8_t rows)
 
   //  Figure 24 for procedure on 4-bit initialization
   //  wait for more than 15 ms
-  delay(100);  //  no need to optimize as this is called only once.
+  //  if other objects initialize earlier there will be less blocking time.
+  while (millis() < 100) delay(1);
 
   //  Force 4 bit mode
   write4bits(0x03);
@@ -102,6 +105,7 @@ void I2C_LCD::begin(uint8_t cols, uint8_t rows)
   //  default enable display
   display();
   clear();
+  return true;
 }
 
 
@@ -118,7 +122,7 @@ bool I2C_LCD::isConnected()
 //
 void I2C_LCD::setBacklightPin(uint8_t pin, uint8_t polarity)
 {
-  _backLightPin = ( 1 << pin);
+  _backLightPin = (1 << pin);
   _backLightPol = polarity;
 }
 
