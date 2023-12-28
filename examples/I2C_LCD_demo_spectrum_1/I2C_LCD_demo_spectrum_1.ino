@@ -67,7 +67,7 @@ void setup()
   lcd.setCursor(0, 0);
 
   lcd.setCursor(0, 0);
-  lcd.print("SPECTRUM  ANALYZER ");
+  lcd.print(" SPECTRUM  ANALYZER ");
   lcd.setCursor(0, 1);
   lcd.print(" LEFT         RIGHT ");
 
