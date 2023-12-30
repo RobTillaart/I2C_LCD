@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - made initialization delay(100) in **begin()** a bit smarter.
 - add **repeat(c, times)**
 - fix **center()** for non 20x4 LCD.
+- add **I2C_LCD_custom_chars.h** with examples.
 - add examples
 
 
