@@ -119,6 +119,7 @@ See **I2C_LCD_demo_spectrum_row.ino** for an example.
 
 - https://github.com/fmalpartida/New-LiquidCrystal The reference.
 - https://github.com/RobTillaart/ANSI for VT100 alike terminals.
+- https://maxpromer.github.io/LCD-Character-Creator/
 
 
 ## Interface
@@ -207,6 +208,11 @@ a wrapper around **write((uint8_t)index)**
 
 See examples e.g. spectrum, for how to use custom characters.
 
+See also I2C_LCD_custom_chars.h
+
+Finally, there is a very handy online tool to create characters.
+- https://maxpromer.github.io/LCD-Character-Creator/
+
 
 #### Print interface
 
@@ -218,6 +224,15 @@ To right align numbers, see examples.
 - **size_t center(uint8_t row, char \* message)** centers a string on the defined row.
 - **size_t right(uint8_t col, uint8_t row, char \* message)** right align a string.
 col is the align position.
+
+
+## I2C_LCD_special_chars.h
+
+This include file has some defines for often used (at least by me) characters. 
+These characters are mostly Greek characters, like alpha, beta and rho. 
+
+Note however that these will work on displays with the ROM CODE A00 and not 
+with ROM CODE A02 (datasheet).
 
 
 ## Experimental

@@ -8,7 +8,7 @@
 #include "Wire.h"
 
 #include "I2C_LCD.h"
-#include "I2C_LCD_special_chars.h"
+
 
 I2C_LCD lcd(39);
 
@@ -23,6 +23,7 @@ uint8_t media_player[8][8] =
   { 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 },   //  todo
   { 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10 }    //  todo
 };
+
 
 void setup()
 {
