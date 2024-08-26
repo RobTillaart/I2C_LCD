@@ -46,6 +46,7 @@ void setup()
   lcd.print(LCD_XAVG);
   lcd.print(LCD_DEGREE);
   lcd.print(LCD_DIVIDE);
+  lcd.print(LCD_SQROOT);
 
   lcd.setCursor(0, 3);
   lcd.print("done...");
