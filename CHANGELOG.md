@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - fix #11, add dice example
 - add single pixel example
 - update spectrum_column example
-- fix special chars, LCD_SQROOT
+- fix special chars, LCD_SQROOT + LCD_SIGMA + LCD_SUM
+- add custom chars +- and euro
 - fix version in .cpp
 
 ## [0.2.1] - 2024-01-08
