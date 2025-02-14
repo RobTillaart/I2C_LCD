@@ -20,8 +20,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add example for BACKSPACE printing
 - add example for FORMFEED printing
 - add example for LINEFEED printing
-- add moveCursorUp()
-- add moveCursorDown()
+- add void moveCursorUp()
+- add void moveCursorDown()
+- add uint8_t getRow()
 
 ## [0.2.2] - 2024-08-26
 - fix #11, add dice example
