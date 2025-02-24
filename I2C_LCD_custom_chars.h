@@ -177,7 +177,7 @@ uint8_t doubleLine[] = {
 
 ////////////////////////////////////
 //
-//  MIRROR DIGITS
+//  MIRROR DIGITS  (0 and 8 are the same)
 //
 uint8_t mirror_1[] =
 {
@@ -278,7 +278,7 @@ uint8_t mirror_9[] =
 
 ////////////////////////////////////
 //
-//  UPSIDE DIGITS
+//  UPSIDE DIGITS  (0 and 8 are the same)
 //
 uint8_t upside_1[] =
 {
