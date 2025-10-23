@@ -39,7 +39,7 @@ PROGMEM const uint32_t longs[] = { 12341234, 654321254, 0, 6147};
 PROGMEM const float floats[] = { 12.34, 654.32, 0, 61.47};
 
 //  FAILS, TO INVESTIGATE HOW
-PROGMEM const char hello[] = "Hello world";
+PROGMEM const char progmemstr[] = "Hello from progmem";
 char buffer[20];
 
 
@@ -105,21 +105,24 @@ void setup()
   lcd.print(pgm_read_float_near(&floats[1]), 4);
   delay(1000);
 
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print((const __FlashStringHelper*)progmemstr);
+  delay(1000);
   // FAILS
-  //  lcd.clear();
-  //  lcd.setCursor(0, 0);
+  //  lcd.setCursor(0, 1);
   //  strcpy_P(buffer, (char *) pgm_read_ptr(hello));
   //  lcd.print(buffer);
   //  delay(2000);
 
-  lcd.clear();
-  lcd.setCursor(0, 0);
+  lcd.setCursor(0, 1);
   lcd.print("hello world");
-  lcd.setCursor(6, 0);
+  delay(1000);
+  lcd.setCursor(6, 1);
   lcd.clearEOL();
   lcd.print("mars");  //  column is out of range!!
   delay(1000);
-  lcd.setCursor(6, 0);
+  lcd.setCursor(6, 1);
   lcd.print("moon");
 }
 

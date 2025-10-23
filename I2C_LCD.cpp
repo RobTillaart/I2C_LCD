@@ -1,7 +1,7 @@
 //
 //    FILE: I2C_LCD.cpp
 //  AUTHOR: Rob.Tillaart
-// VERSION: 0.2.4
+// VERSION: 0.2.5
 //    DATE: 2023-12-16
 // PURPOSE: Arduino library for I2C_LCD
 //     URL: https://github.com/RobTillaart/I2C_LCD
@@ -12,6 +12,11 @@
 //  40 us is a save value at any speed.
 //  20 us is a save value for I2C at 400K.
 const uint8_t I2C_LCD_CHAR_DELAY = 0;
+
+//  possible fix for #15
+//  comment this line if data get garbled after several seconds.
+//  might work, or not.
+#define I2C_LCD_FAST_SEND          1
 
 
 ///////////////////////////////////////////////////////
@@ -503,12 +508,29 @@ void I2C_LCD::send(uint8_t value, bool dataFlag)
     }
   }
 
+#ifdef I2C_LCD_FAST_SEND
+  //  send two nibbles in one call
   _wire->beginTransmission(_address);
   _wire->write(MSN | _enable);
   _wire->write(MSN);
   _wire->write(LSN | _enable);
   _wire->write(LSN);
   _wire->endTransmission();
+#else
+  //  send two nibbles in two calls.
+  _wire->beginTransmission(_address);
+  _wire->write(MSN | _enable);
+  _wire->write(MSN);
+  _wire->endTransmission();
+
+  delayMicroseconds(10);
+
+  _wire->beginTransmission(_address);
+  _wire->write(LSN | _enable);
+  _wire->write(LSN);
+  _wire->endTransmission();
+#endif
+
   if (I2C_LCD_CHAR_DELAY) delayMicroseconds(I2C_LCD_CHAR_DELAY);
 }
 
