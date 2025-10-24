@@ -75,7 +75,7 @@ void I2C_LCD::config (uint8_t address, uint8_t enable, uint8_t readWrite, uint8_
   _pin4567 = ((data4 == 4) && (data5 == 5) && (data6 == 6) && (data7 == 7));
   //  if pins are 0,1,2,3 they are also in order
   //  but the shift/mask in send() should be different
-  //  4,5,6,7 is most used afaik.
+  //  4,5,6,7 is most used (assumption).
 }
 
 
@@ -90,7 +90,7 @@ bool I2C_LCD::begin(uint8_t cols, uint8_t rows)
   //  ALL LINES LOW.
   _wire->beginTransmission(_address);
   _wire->write(0x00);
-  _wire->endTransmission();
+  _error = _wire->endTransmission();
 
   //  Figure 24 for procedure on 4-bit initialization
   //  wait for more than 15 ms
@@ -102,11 +102,11 @@ bool I2C_LCD::begin(uint8_t cols, uint8_t rows)
   //  times are taken longer for robustness.
   //  note this is typically only called once.
   write4bits(0x03);
-  delayMicroseconds(5000);  //  datasheet > 4.1 millis
+  delayMicroseconds(5000);  //  datasheet > 4.1 milliseconds
   write4bits(0x03);
-  delayMicroseconds(200);   //  datasheet > 100 usec
+  delayMicroseconds(200);   //  datasheet > 100 microseconds
   write4bits(0x03);
-  delayMicroseconds(200);   //  datasheet > 100 usec
+  delayMicroseconds(200);   //  datasheet > 100 microseconds
 
   //  command to set 4 bit interface
   write4bits(0x02);
@@ -117,14 +117,15 @@ bool I2C_LCD::begin(uint8_t cols, uint8_t rows)
   //  default enable display
   display();
   clear();
-  return true;
+  return (_error == I2C_LCD_OK);
 }
 
 
 bool I2C_LCD::isConnected()
 {
   _wire->beginTransmission(_address);
-  return (_wire->endTransmission() == 0);
+  _error = _wire->endTransmission();
+  return (_error == I2C_LCD_OK);
 }
 
 
@@ -374,10 +375,10 @@ size_t I2C_LCD::write(uint8_t c)
 
   //  experimental
   //  SPECIAL ASCII CHAR SUPPORT
-  //  char(7) == BELL not possible (special chars)
-  //  char(11) == VERTICAL TAB => next line same pos  (NEED COL)
+  //  char(7) == BELL not possible (7 = special character)
+  //  char(11) == VERTICAL TAB => next line same position  (NEED COL)
 
-  //  handle BACKSPACE char(8) - one pos left.
+  //  handle BACKSPACE char(8) - one position to the left.
   if (c == (uint8_t)'\b')
   {
     if (_pos > 0)
@@ -416,6 +417,7 @@ size_t I2C_LCD::write(uint8_t c)
     clear();
     return n;
   }
+
   //  handle RETURN char(13) - start of current line.
   if (c == (uint8_t)'\r')
   {
@@ -427,6 +429,18 @@ size_t I2C_LCD::write(uint8_t c)
     return n;
   }
 
+  //  handle SO char(14)
+  // if (c == 14)
+  // {
+    // return 0;
+  // }
+  //  handle SI char(15)
+  // if (c == 15)
+  // {
+    // return 0;
+  // }
+
+  //  DEFAULT
   //  handle normal characters.
   if (_pos < _cols)   //  overflow protect.
   {
@@ -437,7 +451,7 @@ size_t I2C_LCD::write(uint8_t c)
   //  not allowed to print beyond display,
   //  prevents garbage, so return 0.
   return 0;
-};
+}
 
 
 size_t I2C_LCD::center(uint8_t row, const char * message)
@@ -464,6 +478,14 @@ size_t I2C_LCD::repeat(uint8_t c, uint8_t times)
     n += write(c);
   }
   return n;
+}
+
+
+int I2C_LCD::getLastError()
+{
+  int e = _error;
+  _error = I2C_LCD_OK;
+  return e;
 }
 
 
@@ -515,20 +537,20 @@ void I2C_LCD::send(uint8_t value, bool dataFlag)
   _wire->write(MSN);
   _wire->write(LSN | _enable);
   _wire->write(LSN);
-  _wire->endTransmission();
+  _error = _wire->endTransmission();
 #else
   //  send two nibbles in two calls.
   _wire->beginTransmission(_address);
   _wire->write(MSN | _enable);
   _wire->write(MSN);
-  _wire->endTransmission();
+  _error = _wire->endTransmission();
 
   delayMicroseconds(10);
 
   _wire->beginTransmission(_address);
   _wire->write(LSN | _enable);
   _wire->write(LSN);
-  _wire->endTransmission();
+  _error = _wire->endTransmission();
 #endif
 
   if (I2C_LCD_CHAR_DELAY) delayMicroseconds(I2C_LCD_CHAR_DELAY);
@@ -548,10 +570,11 @@ void I2C_LCD::write4bits(uint8_t value)
 
   _wire->beginTransmission(_address);
   _wire->write(cmd | _enable);
-  _wire->endTransmission();
+  _error = _wire->endTransmission();
+  //  check _error?
   _wire->beginTransmission(_address);
   _wire->write(cmd);
-  _wire->endTransmission();
+  _error = _wire->endTransmission();
 }
 
 

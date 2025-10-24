@@ -17,6 +17,9 @@
 const uint8_t POSITIVE = 1;
 const uint8_t NEGATIVE = 0;
 
+//  Error handling / diagnostics
+const int I2C_LCD_OK = 0;
+
 
 class I2C_LCD : public Print
 {
@@ -51,7 +54,7 @@ public:
 
   //  POSITIONING & CURSOR
   void      clear();      //  clears whole screen
-  void      clearEOL();   //  clears line from current pos.
+  void      clearEOL();   //  clears line from current position.
   void      home();
   bool      setCursor(uint8_t col, uint8_t row);
 
@@ -87,10 +90,11 @@ public:
   size_t    repeat(uint8_t c, uint8_t times);
 
 
-  //  DEBUG  development
-  uint8_t   getColumn() { return _pos; };  //  works.
-  uint8_t   getRow()    { return _row; };  //  works.
+  //  DIAGNOSTICS
+  uint8_t   getColumn() { return _pos; };  //  works
+  uint8_t   getRow()    { return _row; };  //  works
   uint32_t  getWriteCount()  { return _count; };  // works
+  int       getLastError();
 
 
   //  OBSOLETE 3.0
@@ -134,6 +138,8 @@ private:
   uint8_t   _row = 0;
 
   uint32_t  _count = 0;
+
+  int       _error = I2C_LCD_OK;
 };
 
 
