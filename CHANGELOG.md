@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
 ## [0.2.5] - 2025-10-23
-- test to fix 15 ?
 - update GitHub actions
+- add optional code to send nibbles slower (diagnostic).
 - update examples
 - add I2C_LCD_multi_LCD.ino example
 - minor edits
