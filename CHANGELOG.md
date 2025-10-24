@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - add optional code to send nibbles slower (diagnostic)
 - update examples
 - add I2C_LCD_multi_LCD.ino example
+- update readme.md
 - minor edits
 
 ## [0.2.4] - 2025-02-23
