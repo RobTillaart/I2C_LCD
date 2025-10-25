@@ -18,7 +18,9 @@ const uint8_t POSITIVE = 1;
 const uint8_t NEGATIVE = 0;
 
 //  Error handling / diagnostics
-const int I2C_LCD_OK = 0;
+const int I2C_LCD_OK = 0x00;
+const int I2C_LCD_ERR_ADDRESS = 0x80;
+const int I2C_LCD_ERR_COLUMN_ROW = 0x81;
 
 
 class I2C_LCD : public Print
@@ -28,7 +30,7 @@ public:
   explicit  I2C_LCD(uint8_t address, TwoWire * wire = &Wire);
 
   //  adjust pins
-  void      config(uint8_t address, uint8_t enable, uint8_t readWrite, uint8_t registerSelect,
+  int      config(uint8_t address, uint8_t enable, uint8_t readWrite, uint8_t registerSelect,
                    uint8_t data4, uint8_t data5, uint8_t data6, uint8_t data7,
                    uint8_t backLight, uint8_t polarity);
 
@@ -91,9 +93,9 @@ public:
 
 
   //  DIAGNOSTICS
-  uint8_t   getColumn() { return _pos; };  //  works
-  uint8_t   getRow()    { return _row; };  //  works
-  uint32_t  getWriteCount()  { return _count; };  // works
+  uint8_t   getColumn() { return _position; };
+  uint8_t   getRow()    { return _row; };
+  uint32_t  getWriteCount()  { return _count; };
   int       getLastError();
 
 
@@ -127,14 +129,14 @@ private:
   uint8_t   _backLightPol   = 1;
   uint8_t   _backLight      = 1;
 
-  uint8_t   _cols = 20;
+  uint8_t   _columns = 20;
   uint8_t   _rows = 4;
 
   //  DISPLAYCONTROL bit always on, set in constructor.
   uint8_t   _displayControl = 0;
 
   //  overflow protection
-  uint8_t   _pos = 0;
+  uint8_t   _position = 0;
   uint8_t   _row = 0;
 
   uint32_t  _count = 0;

@@ -199,11 +199,12 @@ Note: error handling is under development, will improve in multiple iterations.
 
 - **I2C_LCD(uint8_t address, TwoWire \* wire = &Wire)** Constructor,
 mandatory address and optional alternative I2C bus.
-- **void config(uint8_t address, uint8_t enable, uint8_t readWrite, uint8_t registerSelect,
+- **int config(uint8_t address, uint8_t enable, uint8_t readWrite, uint8_t registerSelect,
                    uint8_t data4, uint8_t data5, uint8_t data6, uint8_t data7,
                    uint8_t backlight, uint8_t polarity)** pin configuration.
 Will probably change in the future, less compatible.
-- **bool begin(uint8_t cols = 20, uint8_t rows = 4)** initializes library, esp the LCD screen size.
+Returns error status.
+- **bool begin(uint8_t columns = 20, uint8_t rows = 4)** initializes library, esp the LCD screen size.
 User must call the appropriate **Wire.begin()** before calling **lcd.begin(()**
 It is advised to initialize the LCD as last device as it blocks until 100 milliseconds
 since startup have passed to give the LCD time to boot.
@@ -235,7 +236,7 @@ There are no checks, user is responsible.
 - **void clear()** clear whole screen and set cursor to 0, 0 (upper left).
 - **void clearEOL()** clears line from current pos. **NEW**
 - **void home()** set cursor to 0, 0 (upper left).
-- **bool setCursor(uint8_t col, uint8_t row)** set cursor to given position.
+- **bool setCursor(uint8_t column, uint8_t row)** set cursor to given position.
 There is a check if this is out of range, if so the function will return false.
 - **void noBlink()** idem.
 - **void blink()** idem.
@@ -275,16 +276,24 @@ a wrapper around **write((uint8_t)index)**
 - **void createChar(uint8_t index, uint8_t \* charmap)** index = 0..7.
 - **size_t special(uint8_t index)** to print the special char.
 
+See also
+- **I2C_LCD_custom_chars.h**
+- **I2C_LCD_spectrum_chars.h**
+
 See examples e.g. spectrum, for how to use custom characters.
 
-See examples
+There are several examples using custom characters, a.o.
+
 - **I2C_LCD_custom_chars.h**
 - **I2C_LCD_custom_chars_dice.ino** 
 - **I2C_LCD_custom_chars_pixel.ino**
 - **I2C_LCD_mirror_digits.ino**  warning: multi-digit numbers are not mirrored automatically.
+- **I2C_LCD_media_player_chars.ino**
 - **I2C_LCD_upsideDown_digits.ino**  works well, e.g. for an Heads Up Display!
+- **I2C_LCD_demo_special_intensity.ino**
+- several "spectrum" examples
 
-Finally, there is a very handy online tool to create custom characters.
+Finally, there is a very useful online tool to create custom characters.
 - https://maxpromer.github.io/LCD-Character-Creator/
 
 
@@ -433,8 +442,8 @@ This function can be checked after all functions that write to the display.
 |     4  |  other twi error             |  AVR TwoWire
 |     5  |  timeout                     |  AVR TwoWire
 |        |                              |
-|        |  I2C_LCD_ERR_ADDRESS         |  not implemented yet
-|        |  I2C_LCD_ERR_COLUMN_ROW      |  not implemented yet
+|  0x80  |  I2C_LCD_ERR_ADDRESS         |
+|  0x81  |  I2C_LCD_ERR_COLUMN_ROW      |
 
 To elaborate.
 
@@ -448,23 +457,30 @@ To elaborate.
 #### Should
 
 - test other platforms.
+  - ESP32, RPI2040
 - test other display sizes.
 
 #### Could
 
 - improve error handling
   - return value of **bool send()** et al?
-  - address error in **bool config()**
-  - COLUMN / ROW error
   - unprintable char?
 - function to define the tab-stops, instead of hard coded ones.
-  - see lineFormatter.
+  - see **lineFormatter** class
+  - four would be sufficient for a 20x4 as 0 is automatic. 
+  - default {4,8,12,16};
 - investigate special ASCII characters e.g.
   - macros.
-- add combined functions like **lcd.rcp(row, column, char arr);** ?
 - example matrix screen saver.
 - example on wokwi
-
+- investigate delays in clear() and home().
+- **void clearBOL()** clear from begin of line to current position
+- **void clearLine()** clear current line only (spaces).
+- **setCursor(col)** set column in current line.
+- readability code
+  - Magic numbers e.g. in begin(),
+  - (private) position => column?
+  - maybe more.
 
 #### Wont (for now).
 
@@ -474,7 +490,11 @@ To elaborate.
 - implement unit tests (possible?)
 - add timestamp last print (user can do this easily)
 - derived class for I2C_LCD4567 (optimized pins, gain too small)
-- load 8 chars in one call (goldplating).
+  - idem for I2C_LCD0123 
+- load 8 chars in one call (gold plating).
+- add combined functions like **lcd.rcp(row, column, char arr)** 
+  - **lcd.text(row, column, char arr)**?
+  - all data types need to work, template ?
 
 
 ## Support

@@ -47,14 +47,14 @@ void setup()
 
   for (int i = 0; i < 8; i++)
   {
-    //    lcd.createChar(i, columnWide[i]);
-    //    lcd.createChar(i, columnMedium[i]);
-    //    lcd.createChar(i, columnSmall[i]);
-    //    lcd.createChar(i, columnLine[i]);
-    lcd.createChar(i, columnHollow[i]);
+       lcd.createChar(i, columnWide[i]);
+    //  lcd.createChar(i, columnMedium[i]);
+    //  lcd.createChar(i, columnSmall[i]);
+    //  lcd.createChar(i, columnHollow[i]);
   }
 
   lcd.clear();
+  //  test char set
   //  for (int i = 0; i < 8; i++)
   //  {
   //    lcd.special(i);
@@ -69,6 +69,7 @@ void loop()
   for (int i = 0; i < 20; i++)
   {
     spectrumColumn(i, random(32));
+    //  delay(100);  //  see it happen
   }
   delay(500);  //  adjust the speed
 }

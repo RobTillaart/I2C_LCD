@@ -8,11 +8,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.2.5] - 2025-10-23
 - update GitHub actions
+- reduce # platforms in build-CI except for 1 example.
 - add **I2C_LCD_spectrum_chars.h** (partially tested)
 - add **int getLastError()** start for error handling / diagnostics.
+- add return value in **int config()**
 - add optional code to send nibbles slower (diagnostic)
 - update examples
-- add I2C_LCD_multi_LCD.ino example
+- add example **I2C_LCD_multi_LCD.ino**
+- add example **I2C_LCD_demo_special_intensity.ino**
+- improved readability (pos => position et al).
 - update readme.md
 - minor edits
 
