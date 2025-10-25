@@ -80,6 +80,7 @@ int I2C_LCD::config (uint8_t address, uint8_t enable, uint8_t readWrite, uint8_t
   //  if pins are 0,1,2,3 they are also in order
   //  but the shift/mask in send() should be different
   //  4,5,6,7 is most used (assumption).
+  return I2C_LCD_OK;
 }
 
 

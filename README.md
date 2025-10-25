@@ -90,22 +90,24 @@ Use the sketch I2C_LCD_performance.ino to make measurements.
 
 Measurements done with **UNO R3** (5V, 16 MHz), data pins are in ascending order.
 
-|  I2C clock  |  0.1.0  |  0.1.1  |  0.1.4  |  0.2.0  |  0.2.1  |  notes  |
-|:-----------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-|  100000     |   4316  |   4640  |   4312  |   4316  |   4316  |
-|  200000     |   2440  |   2760  |   2456  |   2448  |   2448  |
-|  300000     |   1780  |   2108  |   1792  |   1792  |   1792  |
-|  400000     |   1496  |   1820  |   1512  |   1508  |   1508  |  (1)
-|  500000     |   1308  |   1632  |   1324  |   1332  |   1332  |
-|  600000     |   1176  |   1500  |   1188  |   1188  |   1188  |
-|  700000     |   1076  |   1400  |   1084  |   1084  |   1084  |
-|  800000     |   1024  |   1348  |   1040  |   1044  |   1044  |
+|  I2C clock  |  0.1.0  |  0.1.1  |  0.1.4  |  0.2.0  |  0.2.1  |  0.2.5  |  notes  |
+|:-----------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+|  100000     |   4316  |   4640  |   4312  |   4316  |   4316  |   4322  |
+|  200000     |   2440  |   2760  |   2456  |   2448  |   2448  |   2456  |
+|  300000     |   1780  |   2108  |   1792  |   1792  |   1792  |   1808  |
+|  400000     |   1496  |   1820  |   1512  |   1508  |   1508  |   1516  |  (1)
+|  500000     |   1308  |   1632  |   1324  |   1332  |   1332  |   1336  |
+|  600000     |   1176  |   1500  |   1188  |   1188  |   1188  |   1196  |
+|  700000     |   1076  |   1400  |   1084  |   1084  |   1084  |   1096  |
+|  800000     |   1024  |   1348  |   1040  |   1044  |   1044  |   1048  |
 
 
 _Note 1: 0.1.0 had problems with spectrum examples - too much data too fast, corrupted my display.
 Timing in the 0.1.1 version is roughly 400 us slower than 0.1.0 for 8 characters. 
 However the 0.1.1 is more robust as far as tested.
 Advice is to use version 0.2.0 or higher._
+
+Performance 0.2.5 is minimal slower, probably due to error handling.
 
 
 Measurements with **ESP8266** (3V3, single core 80 MHz), data pins are in ascending order.
@@ -432,18 +434,18 @@ This function can be checked after all functions that write to the display.
 
 0.2.5 - The low level I2C functions set the error flag. 
 
-|  Code  |  Description                 |  Notes  |
-|:------:|:----------------------------:|:--------|
-|     0  |  I2C_LCD_OK                  |  no error
-|   1-5  |  twoWire specific            |  check low level library
-|     1  |  length to long for buffer   |  AVR TwoWire
-|     2  |  address send, NACK received |  AVR TwoWire
-|     3  |  data send, NACK received    |  AVR TwoWire
-|     4  |  other twi error             |  AVR TwoWire
-|     5  |  timeout                     |  AVR TwoWire
-|        |                              |
-|  0x80  |  I2C_LCD_ERR_ADDRESS         |
-|  0x81  |  I2C_LCD_ERR_COLUMN_ROW      |
+|  Code  |  Description                  |  Notes  |
+|:------:|:------------------------------|:--------|
+|     0  |  I2C_LCD_OK                   |  no error
+|   1-5  |  twoWire specific             |  check low level library
+|     1  |  length to long for buffer    |  AVR TwoWire
+|     2  |  address send, NACK received  |  AVR TwoWire
+|     3  |  data send, NACK received     |  AVR TwoWire
+|     4  |  other twi error              |  AVR TwoWire
+|     5  |  timeout                      |  AVR TwoWire
+|        |                               |
+|  0x80  |  I2C_LCD_ERR_ADDRESS          |
+|  0x81  |  I2C_LCD_ERR_COLUMN_ROW       |
 
 To elaborate.
 
@@ -476,11 +478,7 @@ To elaborate.
 - investigate delays in clear() and home().
 - **void clearBOL()** clear from begin of line to current position
 - **void clearLine()** clear current line only (spaces).
-- **setCursor(col)** set column in current line.
-- readability code
-  - Magic numbers e.g. in begin(),
-  - (private) position => column?
-  - maybe more.
+- **setCursor(column)** set to column in current line(row).
 
 #### Wont (for now).
 
